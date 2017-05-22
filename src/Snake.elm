@@ -1,6 +1,7 @@
 module Snake exposing (..)
 
 import Html exposing (..)
+import Html.Events exposing (onClick)
 
 type alias Point = (Int, Int)
 type Heading = North | East | South | West
@@ -67,6 +68,36 @@ is_opposite_heading heading other =
     opposite_heading heading == other
 
 
-main : Html msg
+-- UPDATE
+
+
+type Msg = Tick
+
+update : Msg -> Cranium -> Cranium
+update msg the_cranium =
+    case msg of
+        Tick ->
+            move the_cranium
+
+
+-- VIEW
+
+
+view : Cranium -> Html Msg
+view the_cranium =
+    div [ ]
+        [ div [ ]
+            [ button [ onClick Tick ] [ text "Tick" ] ]
+        , div [ ] [ text (toString the_cranium) ]
+        ]
+
+
+
+main : Program Never Cranium Msg
 main =
-    Html.text (toString cranium)
+    Html.beginnerProgram
+        { model = cranium
+        , view = view
+        , update = update
+        }
+

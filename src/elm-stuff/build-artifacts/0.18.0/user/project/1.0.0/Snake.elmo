@@ -23,6 +23,11 @@ var _user$project$Snake$move = function (the_cranium) {
 			position: {ctor: '_Tuple2', _0: x + dx, _1: y + dy}
 		});
 };
+var _user$project$Snake$update = F2(
+	function (msg, the_cranium) {
+		var _p3 = msg;
+		return _user$project$Snake$move(the_cranium);
+	});
 var _user$project$Snake$origin = {ctor: '_Tuple2', _0: 0, _1: 0};
 var _user$project$Snake$Cranium = F2(
 	function (a, b) {
@@ -32,13 +37,10 @@ var _user$project$Snake$West = {ctor: 'West'};
 var _user$project$Snake$South = {ctor: 'South'};
 var _user$project$Snake$East = {ctor: 'East'};
 var _user$project$Snake$cranium = A2(_user$project$Snake$Cranium, _user$project$Snake$origin, _user$project$Snake$East);
-var _user$project$Snake$main = _elm_lang$virtual_dom$Native_VirtualDom.staticProgram(
-	_elm_lang$html$Html$text(
-		_elm_lang$core$Basics$toString(_user$project$Snake$cranium)));
 var _user$project$Snake$North = {ctor: 'North'};
 var _user$project$Snake$opposite_heading = function (heading) {
-	var _p3 = heading;
-	switch (_p3.ctor) {
+	var _p4 = heading;
+	switch (_p4.ctor) {
 		case 'North':
 			return _user$project$Snake$South;
 		case 'East':
@@ -61,3 +63,46 @@ var _user$project$Snake$turn = F2(
 			the_cranium,
 			{heading: heading});
 	});
+var _user$project$Snake$Tick = {ctor: 'Tick'};
+var _user$project$Snake$view = function (the_cranium) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$div,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$button,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Events$onClick(_user$project$Snake$Tick),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text('Tick'),
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text(
+							_elm_lang$core$Basics$toString(the_cranium)),
+						_1: {ctor: '[]'}
+					}),
+				_1: {ctor: '[]'}
+			}
+		});
+};
+var _user$project$Snake$main = _elm_lang$html$Html$beginnerProgram(
+	{model: _user$project$Snake$cranium, view: _user$project$Snake$view, update: _user$project$Snake$update})();
