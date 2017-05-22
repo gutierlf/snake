@@ -1,0 +1,63 @@
+var _user$project$Snake$move = function (the_cranium) {
+	var _p0 = function () {
+		var _p1 = the_cranium.heading;
+		switch (_p1.ctor) {
+			case 'North':
+				return {ctor: '_Tuple2', _0: 0, _1: -1};
+			case 'East':
+				return {ctor: '_Tuple2', _0: 1, _1: 0};
+			case 'South':
+				return {ctor: '_Tuple2', _0: 0, _1: 1};
+			default:
+				return {ctor: '_Tuple2', _0: -1, _1: 0};
+		}
+	}();
+	var dx = _p0._0;
+	var dy = _p0._1;
+	var _p2 = the_cranium.position;
+	var x = _p2._0;
+	var y = _p2._1;
+	return _elm_lang$core$Native_Utils.update(
+		the_cranium,
+		{
+			position: {ctor: '_Tuple2', _0: x + dx, _1: y + dy}
+		});
+};
+var _user$project$Snake$origin = {ctor: '_Tuple2', _0: 0, _1: 0};
+var _user$project$Snake$Cranium = F2(
+	function (a, b) {
+		return {position: a, heading: b};
+	});
+var _user$project$Snake$West = {ctor: 'West'};
+var _user$project$Snake$South = {ctor: 'South'};
+var _user$project$Snake$East = {ctor: 'East'};
+var _user$project$Snake$cranium = A2(_user$project$Snake$Cranium, _user$project$Snake$origin, _user$project$Snake$East);
+var _user$project$Snake$main = _elm_lang$virtual_dom$Native_VirtualDom.staticProgram(
+	_elm_lang$html$Html$text(
+		_elm_lang$core$Basics$toString(_user$project$Snake$cranium)));
+var _user$project$Snake$North = {ctor: 'North'};
+var _user$project$Snake$opposite_heading = function (heading) {
+	var _p3 = heading;
+	switch (_p3.ctor) {
+		case 'North':
+			return _user$project$Snake$South;
+		case 'East':
+			return _user$project$Snake$West;
+		case 'South':
+			return _user$project$Snake$North;
+		default:
+			return _user$project$Snake$East;
+	}
+};
+var _user$project$Snake$is_opposite_heading = F2(
+	function (heading, other) {
+		return _elm_lang$core$Native_Utils.eq(
+			_user$project$Snake$opposite_heading(heading),
+			other);
+	});
+var _user$project$Snake$turn = F2(
+	function (heading, the_cranium) {
+		return A2(_user$project$Snake$is_opposite_heading, heading, the_cranium.heading) ? the_cranium : _elm_lang$core$Native_Utils.update(
+			the_cranium,
+			{heading: heading});
+	});

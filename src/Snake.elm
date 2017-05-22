@@ -1,9 +1,13 @@
 module Snake exposing (..)
 
+import Html exposing (..)
 
 type alias Point = (Int, Int)
 type Heading = North | East | South | West
 type alias Cranium = { position : Point, heading: Heading }
+
+
+-- MODEL
 
 
 origin : Point
@@ -35,19 +39,13 @@ move the_cranium =
         {the_cranium | position = (x + dx, y + dy)}
 
 
---turn_north : Cranium -> Cranium
---turn_north the_cranium =
---    let
---        heading =
---            case the_cranium.heading of
---                North | East | West ->
---                    North
+turn : Heading -> Cranium -> Cranium
+turn heading the_cranium =
+    if is_opposite_heading heading the_cranium.heading then
+        the_cranium
+    else
+        {the_cranium | heading = heading}
 
---                South ->
---                    South
---    in
---        {the_cranium | heading = heading}
-            
 
 opposite_heading : Heading -> Heading
 opposite_heading heading =
@@ -63,3 +61,12 @@ opposite_heading heading =
 
         West ->
             East
+
+is_opposite_heading : Heading -> Heading -> Bool
+is_opposite_heading heading other =
+    opposite_heading heading == other
+
+
+main : Html msg
+main =
+    Html.text (toString cranium)
