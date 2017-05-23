@@ -8322,6 +8322,10 @@ var _elm_lang$html$Html_Events$Options = F2(
 		return {stopPropagation: a, preventDefault: b};
 	});
 
+var _user$project$Snake$view = function (model) {
+	return _elm_lang$html$Html$text(
+		_elm_lang$core$Basics$toString(model));
+};
 var _user$project$Snake$move = function (model) {
 	var _p0 = function () {
 		var _p1 = model.heading;
@@ -8350,7 +8354,11 @@ var _user$project$Snake$move = function (model) {
 var _user$project$Snake$update = F2(
 	function (msg, model) {
 		var _p3 = msg;
-		return _user$project$Snake$move(model);
+		return {
+			ctor: '_Tuple2',
+			_0: _user$project$Snake$move(model),
+			_1: _elm_lang$core$Platform_Cmd$none
+		};
 	});
 var _user$project$Snake$origin = {ctor: '_Tuple2', _0: 0, _1: 0};
 var _user$project$Snake$Model = F2(
@@ -8360,7 +8368,8 @@ var _user$project$Snake$Model = F2(
 var _user$project$Snake$West = {ctor: 'West'};
 var _user$project$Snake$South = {ctor: 'South'};
 var _user$project$Snake$East = {ctor: 'East'};
-var _user$project$Snake$cranium = A2(_user$project$Snake$Model, _user$project$Snake$origin, _user$project$Snake$East);
+var _user$project$Snake$initialModel = A2(_user$project$Snake$Model, _user$project$Snake$origin, _user$project$Snake$East);
+var _user$project$Snake$init = {ctor: '_Tuple2', _0: _user$project$Snake$initialModel, _1: _elm_lang$core$Platform_Cmd$none};
 var _user$project$Snake$North = {ctor: 'North'};
 var _user$project$Snake$opposite_heading = function (heading) {
 	var _p4 = heading;
@@ -8387,49 +8396,14 @@ var _user$project$Snake$turn = F2(
 			model,
 			{heading: heading});
 	});
-var _user$project$Snake$Tick = {ctor: 'Tick'};
-var _user$project$Snake$view = function (model) {
-	return A2(
-		_elm_lang$html$Html$div,
-		{ctor: '[]'},
-		{
-			ctor: '::',
-			_0: A2(
-				_elm_lang$html$Html$div,
-				{ctor: '[]'},
-				{
-					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$button,
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html_Events$onClick(_user$project$Snake$Tick),
-							_1: {ctor: '[]'}
-						},
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html$text('Tick'),
-							_1: {ctor: '[]'}
-						}),
-					_1: {ctor: '[]'}
-				}),
-			_1: {
-				ctor: '::',
-				_0: A2(
-					_elm_lang$html$Html$div,
-					{ctor: '[]'},
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html$text(
-							_elm_lang$core$Basics$toString(model)),
-						_1: {ctor: '[]'}
-					}),
-				_1: {ctor: '[]'}
-			}
-		});
+var _user$project$Snake$Tick = function (a) {
+	return {ctor: 'Tick', _0: a};
 };
-var _user$project$Snake$main = _elm_lang$html$Html$beginnerProgram(
-	{model: _user$project$Snake$cranium, view: _user$project$Snake$view, update: _user$project$Snake$update})();
+var _user$project$Snake$subs = function (model) {
+	return A2(_elm_lang$core$Time$every, _elm_lang$core$Time$second, _user$project$Snake$Tick);
+};
+var _user$project$Snake$main = _elm_lang$html$Html$program(
+	{init: _user$project$Snake$init, view: _user$project$Snake$view, update: _user$project$Snake$update, subscriptions: _user$project$Snake$subs})();
 
 var Elm = {};
 Elm['Snake'] = Elm['Snake'] || {};

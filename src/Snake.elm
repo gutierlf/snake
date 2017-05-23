@@ -16,10 +16,6 @@ origin : Point
 origin = (0, 0)
 
 
-cranium : Model
-cranium = Model origin East
-
-
 move : Model -> Model
 move model =
     let
@@ -72,13 +68,29 @@ is_opposite_heading heading other =
 -- UPDATE
 
 
-type Msg = Tick
+type Msg
+    = Tick Time
 
-update : Msg -> Model -> Model
+
+update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
     case msg of
-        Tick ->
-            move model
+        Tick newTime ->
+            (move model, Cmd.none)
+
+
+initialModel : Model
+initialModel = Model origin East
+
+
+init : (Model, Cmd Msg)
+init =
+    (initialModel, Cmd.none)
+
+
+subs : Model -> Sub Msg
+subs model =
+  Time.every second Tick
 
 
 -- VIEW
@@ -86,19 +98,14 @@ update msg model =
 
 view : Model -> Html Msg
 view model =
-    div [ ]
-        [ div [ ]
-            [ button [ onClick Tick ] [ text "Tick" ] ]
-        , div [ ] [ text (toString model) ]
-        ]
+    text (toString model)
 
 
 
-main : Program Never Model Msg
 main =
-    Html.beginnerProgram
-        { model = cranium
+    program
+        { init = init
         , view = view
         , update = update
+        , subscriptions = subs
         }
-
