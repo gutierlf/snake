@@ -8390,11 +8390,15 @@ var _user$project$Snake$is_opposite_heading = F2(
 			_user$project$Snake$opposite_heading(heading),
 			other);
 	});
+var _user$project$Snake$canTurn = F2(
+	function (model, heading) {
+		return !A2(_user$project$Snake$is_opposite_heading, model.heading, heading);
+	});
 var _user$project$Snake$turn = F2(
 	function (heading, model) {
-		return A2(_user$project$Snake$is_opposite_heading, heading, model.heading) ? model : _elm_lang$core$Native_Utils.update(
+		return A2(_user$project$Snake$canTurn, model, heading) ? _elm_lang$core$Native_Utils.update(
 			model,
-			{heading: heading});
+			{heading: heading}) : model;
 	});
 var _user$project$Snake$Tick = function (a) {
 	return {ctor: 'Tick', _0: a};

@@ -4,16 +4,44 @@ import Html exposing (..)
 import Html.Events exposing (onClick)
 import Time exposing (..)
 
+-- MODEL
+
+
 type alias Point = (Int, Int)
 type Heading = North | East | South | West
 type alias Model = { position : Point, heading: Heading }
 
 
--- MODEL
-
-
 origin : Point
 origin = (0, 0)
+
+
+initialModel : Model
+initialModel = Model origin East
+
+
+init : (Model, Cmd Msg)
+init =
+    (initialModel, Cmd.none)
+
+
+-- UPDATE
+
+
+type Msg
+    = Tick Time
+
+
+subs : Model -> Sub Msg
+subs model =
+  Time.every second Tick
+
+
+update : Msg -> Model -> (Model, Cmd Msg)
+update msg model =
+    case msg of
+        Tick newTime ->
+            (move model, Cmd.none)
 
 
 move : Model -> Model
@@ -39,10 +67,21 @@ move model =
 
 turn : Heading -> Model -> Model
 turn heading model =
-    if is_opposite_heading heading model.heading then
-        model
-    else
+    if canTurn model heading
+    then
         {model | heading = heading}
+    else
+        model
+
+
+canTurn : Model -> Heading -> Bool
+canTurn model heading = 
+    not (is_opposite_heading model.heading heading)
+
+
+is_opposite_heading : Heading -> Heading -> Bool
+is_opposite_heading heading other =
+    opposite_heading heading == other
 
 
 opposite_heading : Heading -> Heading
@@ -59,39 +98,6 @@ opposite_heading heading =
 
         West ->
             East
-
-is_opposite_heading : Heading -> Heading -> Bool
-is_opposite_heading heading other =
-    opposite_heading heading == other
-
-
--- UPDATE
-
-
-type Msg
-    = Tick Time
-
-
-update : Msg -> Model -> (Model, Cmd Msg)
-update msg model =
-    case msg of
-        Tick newTime ->
-            (move model, Cmd.none)
-
-
-initialModel : Model
-initialModel = Model origin East
-
-
-init : (Model, Cmd Msg)
-init =
-    (initialModel, Cmd.none)
-
-
-subs : Model -> Sub Msg
-subs model =
-  Time.every second Tick
-
 
 -- VIEW
 
