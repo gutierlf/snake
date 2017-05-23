@@ -4,6 +4,16 @@ import Html exposing (..)
 import Html.Events exposing (onClick)
 import Time exposing (..)
 
+
+main =
+    program
+        { init = init
+        , view = view
+        , update = update
+        , subscriptions = subscriptions
+        }
+
+
 -- MODEL
 
 
@@ -25,16 +35,19 @@ init =
     (initialModel, Cmd.none)
 
 
+-- VIEW
+
+
+view : Model -> Html Msg
+view model =
+    text (toString model)
+
+
 -- UPDATE
 
 
 type Msg
     = Tick Time
-
-
-subs : Model -> Sub Msg
-subs model =
-  Time.every second Tick
 
 
 update : Msg -> Model -> (Model, Cmd Msg)
@@ -99,19 +112,10 @@ opposite_heading heading =
         West ->
             East
 
--- VIEW
+
+-- SUBSCRIPTIONS
 
 
-view : Model -> Html Msg
-view model =
-    text (toString model)
-
-
-
-main =
-    program
-        { init = init
-        , view = view
-        , update = update
-        , subscriptions = subs
-        }
+subscriptions : Model -> Sub Msg
+subscriptions model =
+  Time.every second Tick

@@ -8322,10 +8322,6 @@ var _elm_lang$html$Html_Events$Options = F2(
 		return {stopPropagation: a, preventDefault: b};
 	});
 
-var _user$project$Snake$view = function (model) {
-	return _elm_lang$html$Html$text(
-		_elm_lang$core$Basics$toString(model));
-};
 var _user$project$Snake$move = function (model) {
 	var _p0 = function () {
 		var _p1 = model.heading;
@@ -8360,6 +8356,10 @@ var _user$project$Snake$update = F2(
 			_1: _elm_lang$core$Platform_Cmd$none
 		};
 	});
+var _user$project$Snake$view = function (model) {
+	return _elm_lang$html$Html$text(
+		_elm_lang$core$Basics$toString(model));
+};
 var _user$project$Snake$origin = {ctor: '_Tuple2', _0: 0, _1: 0};
 var _user$project$Snake$Model = F2(
 	function (a, b) {
@@ -8403,11 +8403,11 @@ var _user$project$Snake$turn = F2(
 var _user$project$Snake$Tick = function (a) {
 	return {ctor: 'Tick', _0: a};
 };
-var _user$project$Snake$subs = function (model) {
+var _user$project$Snake$subscriptions = function (model) {
 	return A2(_elm_lang$core$Time$every, _elm_lang$core$Time$second, _user$project$Snake$Tick);
 };
 var _user$project$Snake$main = _elm_lang$html$Html$program(
-	{init: _user$project$Snake$init, view: _user$project$Snake$view, update: _user$project$Snake$update, subscriptions: _user$project$Snake$subs})();
+	{init: _user$project$Snake$init, view: _user$project$Snake$view, update: _user$project$Snake$update, subscriptions: _user$project$Snake$subscriptions})();
 
 var Elm = {};
 Elm['Snake'] = Elm['Snake'] || {};
