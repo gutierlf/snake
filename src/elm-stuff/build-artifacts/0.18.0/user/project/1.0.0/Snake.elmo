@@ -1,6 +1,6 @@
-var _user$project$Snake$move = function (the_cranium) {
+var _user$project$Snake$move = function (model) {
 	var _p0 = function () {
-		var _p1 = the_cranium.heading;
+		var _p1 = model.heading;
 		switch (_p1.ctor) {
 			case 'North':
 				return {ctor: '_Tuple2', _0: 0, _1: -1};
@@ -14,29 +14,29 @@ var _user$project$Snake$move = function (the_cranium) {
 	}();
 	var dx = _p0._0;
 	var dy = _p0._1;
-	var _p2 = the_cranium.position;
+	var _p2 = model.position;
 	var x = _p2._0;
 	var y = _p2._1;
 	return _elm_lang$core$Native_Utils.update(
-		the_cranium,
+		model,
 		{
 			position: {ctor: '_Tuple2', _0: x + dx, _1: y + dy}
 		});
 };
 var _user$project$Snake$update = F2(
-	function (msg, the_cranium) {
+	function (msg, model) {
 		var _p3 = msg;
-		return _user$project$Snake$move(the_cranium);
+		return _user$project$Snake$move(model);
 	});
 var _user$project$Snake$origin = {ctor: '_Tuple2', _0: 0, _1: 0};
-var _user$project$Snake$Cranium = F2(
+var _user$project$Snake$Model = F2(
 	function (a, b) {
 		return {position: a, heading: b};
 	});
 var _user$project$Snake$West = {ctor: 'West'};
 var _user$project$Snake$South = {ctor: 'South'};
 var _user$project$Snake$East = {ctor: 'East'};
-var _user$project$Snake$cranium = A2(_user$project$Snake$Cranium, _user$project$Snake$origin, _user$project$Snake$East);
+var _user$project$Snake$cranium = A2(_user$project$Snake$Model, _user$project$Snake$origin, _user$project$Snake$East);
 var _user$project$Snake$North = {ctor: 'North'};
 var _user$project$Snake$opposite_heading = function (heading) {
 	var _p4 = heading;
@@ -58,13 +58,13 @@ var _user$project$Snake$is_opposite_heading = F2(
 			other);
 	});
 var _user$project$Snake$turn = F2(
-	function (heading, the_cranium) {
-		return A2(_user$project$Snake$is_opposite_heading, heading, the_cranium.heading) ? the_cranium : _elm_lang$core$Native_Utils.update(
-			the_cranium,
+	function (heading, model) {
+		return A2(_user$project$Snake$is_opposite_heading, heading, model.heading) ? model : _elm_lang$core$Native_Utils.update(
+			model,
 			{heading: heading});
 	});
 var _user$project$Snake$Tick = {ctor: 'Tick'};
-var _user$project$Snake$view = function (the_cranium) {
+var _user$project$Snake$view = function (model) {
 	return A2(
 		_elm_lang$html$Html$div,
 		{ctor: '[]'},
@@ -97,7 +97,7 @@ var _user$project$Snake$view = function (the_cranium) {
 					{
 						ctor: '::',
 						_0: _elm_lang$html$Html$text(
-							_elm_lang$core$Basics$toString(the_cranium)),
+							_elm_lang$core$Basics$toString(model)),
 						_1: {ctor: '[]'}
 					}),
 				_1: {ctor: '[]'}

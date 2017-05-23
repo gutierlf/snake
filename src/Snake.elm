@@ -2,10 +2,11 @@ module Snake exposing (..)
 
 import Html exposing (..)
 import Html.Events exposing (onClick)
+import Time exposing (..)
 
 type alias Point = (Int, Int)
 type Heading = North | East | South | West
-type alias Cranium = { position : Point, heading: Heading }
+type alias Model = { position : Point, heading: Heading }
 
 
 -- MODEL
@@ -15,16 +16,16 @@ origin : Point
 origin = (0, 0)
 
 
-cranium : Cranium
-cranium = Cranium origin East
+cranium : Model
+cranium = Model origin East
 
 
-move : Cranium -> Cranium
-move the_cranium =
+move : Model -> Model
+move model =
     let
-        (x, y) = the_cranium.position
+        (x, y) = model.position
         (dx, dy) = 
-            case the_cranium.heading of
+            case model.heading of
                 North ->
                     (0, -1)
 
@@ -37,15 +38,15 @@ move the_cranium =
                 West ->
                     (-1, 0)
     in
-        {the_cranium | position = (x + dx, y + dy)}
+        {model | position = (x + dx, y + dy)}
 
 
-turn : Heading -> Cranium -> Cranium
-turn heading the_cranium =
-    if is_opposite_heading heading the_cranium.heading then
-        the_cranium
+turn : Heading -> Model -> Model
+turn heading model =
+    if is_opposite_heading heading model.heading then
+        model
     else
-        {the_cranium | heading = heading}
+        {model | heading = heading}
 
 
 opposite_heading : Heading -> Heading
@@ -73,27 +74,27 @@ is_opposite_heading heading other =
 
 type Msg = Tick
 
-update : Msg -> Cranium -> Cranium
-update msg the_cranium =
+update : Msg -> Model -> Model
+update msg model =
     case msg of
         Tick ->
-            move the_cranium
+            move model
 
 
 -- VIEW
 
 
-view : Cranium -> Html Msg
-view the_cranium =
+view : Model -> Html Msg
+view model =
     div [ ]
         [ div [ ]
             [ button [ onClick Tick ] [ text "Tick" ] ]
-        , div [ ] [ text (toString the_cranium) ]
+        , div [ ] [ text (toString model) ]
         ]
 
 
 
-main : Program Never Cranium Msg
+main : Program Never Model Msg
 main =
     Html.beginnerProgram
         { model = cranium
