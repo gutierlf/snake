@@ -3,6 +3,7 @@ module Snake exposing (..)
 import Html exposing (..)
 import Html.Events exposing (onClick)
 import Time exposing (..)
+import Keyboard
 
 
 main =
@@ -30,6 +31,8 @@ type alias Model =
 
 (boardWidth,boardHeight) = (6,4)
 (halfWidth,halfHeight) = (3,2)
+spacebar : Keyboard.KeyCode
+spacebar = 32
 
 
 
@@ -53,6 +56,7 @@ init =
 type Msg
     = Tick Time
     | TogglePause
+    | KeyMsg Keyboard.KeyCode
 
 
 update : Msg -> Model -> (Model, Cmd Msg)
@@ -62,15 +66,26 @@ update msg model =
             (move model, Cmd.none)
 
         TogglePause ->
-            let
-                state =
-                    case model.state of
-                        Reset -> Play
-                        Play  -> Pause
-                        Pause -> Play
-                        Over  -> Reset
-            in
-                ({ model | state = state }, Cmd.none)
+            (toggleState model, Cmd.none)
+
+        KeyMsg code ->
+            if code == spacebar then
+                (toggleState model, Cmd.none)
+            else
+                (model, Cmd.none)
+
+
+toggleState : Model -> Model
+toggleState model =
+    let
+        state =
+            case model.state of
+                Reset -> Play
+                Play  -> Pause
+                Pause -> Play
+                Over  -> Reset
+    in
+        { model | state = state }
 
 
 move : Model -> Model
@@ -102,8 +117,7 @@ move model =
 
 turn : Heading -> Model -> Model
 turn heading model =
-    if canTurn model heading
-    then
+    if canTurn model heading then
         {model | heading = heading}
     else
         model
@@ -140,18 +154,24 @@ opposite_heading heading =
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    case model.state of
-        Reset ->
-            Sub.none
+    let
+        keyboard = Keyboard.downs KeyMsg
+    in
+        case model.state of
+            Reset ->
+                keyboard
 
-        Play ->
-            Time.every second Tick
+            Play ->
+                Sub.batch
+                    [ keyboard
+                    , Time.every second Tick
+                    ]
 
-        Pause ->
-            Sub.none
+            Pause ->
+                keyboard
 
-        Over ->
-            Sub.none
+            Over ->
+                keyboard
 
 
 -- VIEW
