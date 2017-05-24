@@ -128,7 +128,18 @@ opposite_heading heading =
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-  Time.every second Tick
+    case model.state of
+        Reset ->
+            Sub.none
+
+        Play ->
+            Time.every second Tick
+
+        Pause ->
+            Sub.none
+
+        Over ->
+            Sub.none
 
 
 -- VIEW

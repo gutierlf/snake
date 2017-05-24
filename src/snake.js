@@ -8446,7 +8446,17 @@ var _user$project$Snake$Tick = function (a) {
 	return {ctor: 'Tick', _0: a};
 };
 var _user$project$Snake$subscriptions = function (model) {
-	return A2(_elm_lang$core$Time$every, _elm_lang$core$Time$second, _user$project$Snake$Tick);
+	var _p8 = model.state;
+	switch (_p8.ctor) {
+		case 'Reset':
+			return _elm_lang$core$Platform_Sub$none;
+		case 'Play':
+			return A2(_elm_lang$core$Time$every, _elm_lang$core$Time$second, _user$project$Snake$Tick);
+		case 'Pause':
+			return _elm_lang$core$Platform_Sub$none;
+		default:
+			return _elm_lang$core$Platform_Sub$none;
+	}
 };
 var _user$project$Snake$main = _elm_lang$html$Html$program(
 	{init: _user$project$Snake$init, update: _user$project$Snake$update, subscriptions: _user$project$Snake$subscriptions, view: _user$project$Snake$view})();
