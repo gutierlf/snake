@@ -8322,6 +8322,10 @@ var _elm_lang$html$Html_Events$Options = F2(
 		return {stopPropagation: a, preventDefault: b};
 	});
 
+var _user$project$Snake$view = function (model) {
+	return _elm_lang$html$Html$text(
+		_elm_lang$core$Basics$toString(model));
+};
 var _user$project$Snake$move = function (model) {
 	var _p0 = function () {
 		var _p1 = model.heading;
@@ -8338,42 +8342,80 @@ var _user$project$Snake$move = function (model) {
 	}();
 	var dx = _p0._0;
 	var dy = _p0._1;
-	var _p2 = model.position;
+	var _p2 = function () {
+		var _p3 = _elm_lang$core$List$head(model.positions);
+		if (_p3.ctor === 'Nothing') {
+			return {ctor: '_Tuple2', _0: 0, _1: 0};
+		} else {
+			return _p3._0;
+		}
+	}();
 	var x = _p2._0;
 	var y = _p2._1;
 	return _elm_lang$core$Native_Utils.update(
 		model,
 		{
-			position: {ctor: '_Tuple2', _0: x + dx, _1: y + dy}
+			positions: {
+				ctor: '::',
+				_0: {ctor: '_Tuple2', _0: x + dx, _1: y + dy},
+				_1: model.positions
+			}
 		});
 };
 var _user$project$Snake$update = F2(
 	function (msg, model) {
-		var _p3 = msg;
+		var _p4 = msg;
 		return {
 			ctor: '_Tuple2',
 			_0: _user$project$Snake$move(model),
 			_1: _elm_lang$core$Platform_Cmd$none
 		};
 	});
-var _user$project$Snake$view = function (model) {
-	return _elm_lang$html$Html$text(
-		_elm_lang$core$Basics$toString(model));
-};
-var _user$project$Snake$origin = {ctor: '_Tuple2', _0: 0, _1: 0};
-var _user$project$Snake$Model = F2(
-	function (a, b) {
-		return {position: a, heading: b};
+var _user$project$Snake$_p5 = {ctor: '_Tuple2', _0: 3, _1: 2};
+var _user$project$Snake$halfWidth = _user$project$Snake$_p5._0;
+var _user$project$Snake$halfHeight = _user$project$Snake$_p5._1;
+var _user$project$Snake$_p6 = {ctor: '_Tuple2', _0: 6, _1: 4};
+var _user$project$Snake$boardWidth = _user$project$Snake$_p6._0;
+var _user$project$Snake$boardHeight = _user$project$Snake$_p6._1;
+var _user$project$Snake$Model = F4(
+	function (a, b, c, d) {
+		return {state: a, positions: b, heading: c, length: d};
 	});
+var _user$project$Snake$Over = {ctor: 'Over'};
+var _user$project$Snake$Pause = {ctor: 'Pause'};
+var _user$project$Snake$Play = {ctor: 'Play'};
+var _user$project$Snake$Reset = {ctor: 'Reset'};
 var _user$project$Snake$West = {ctor: 'West'};
 var _user$project$Snake$South = {ctor: 'South'};
 var _user$project$Snake$East = {ctor: 'East'};
-var _user$project$Snake$initialModel = A2(_user$project$Snake$Model, _user$project$Snake$origin, _user$project$Snake$East);
-var _user$project$Snake$init = {ctor: '_Tuple2', _0: _user$project$Snake$initialModel, _1: _elm_lang$core$Platform_Cmd$none};
+var _user$project$Snake$init = function () {
+	var origin = {ctor: '_Tuple2', _0: _user$project$Snake$halfWidth, _1: _user$project$Snake$halfHeight};
+	var length = 2;
+	var y = A2(_elm_lang$core$List$repeat, length, _user$project$Snake$halfHeight);
+	var dx = A2(_elm_lang$core$List$range, 0, length - 1);
+	var x = A3(
+		_elm_lang$core$List$map2,
+		F2(
+			function (x, y) {
+				return x - y;
+			}),
+		A2(_elm_lang$core$List$repeat, length, _user$project$Snake$halfWidth),
+		dx);
+	var positions = A3(
+		_elm_lang$core$List$map2,
+		F2(
+			function (v0, v1) {
+				return {ctor: '_Tuple2', _0: v0, _1: v1};
+			}),
+		x,
+		y);
+	var initialModel = A4(_user$project$Snake$Model, _user$project$Snake$Reset, positions, _user$project$Snake$East, length);
+	return {ctor: '_Tuple2', _0: initialModel, _1: _elm_lang$core$Platform_Cmd$none};
+}();
 var _user$project$Snake$North = {ctor: 'North'};
 var _user$project$Snake$opposite_heading = function (heading) {
-	var _p4 = heading;
-	switch (_p4.ctor) {
+	var _p7 = heading;
+	switch (_p7.ctor) {
 		case 'North':
 			return _user$project$Snake$South;
 		case 'East':
@@ -8407,7 +8449,7 @@ var _user$project$Snake$subscriptions = function (model) {
 	return A2(_elm_lang$core$Time$every, _elm_lang$core$Time$second, _user$project$Snake$Tick);
 };
 var _user$project$Snake$main = _elm_lang$html$Html$program(
-	{init: _user$project$Snake$init, view: _user$project$Snake$view, update: _user$project$Snake$update, subscriptions: _user$project$Snake$subscriptions})();
+	{init: _user$project$Snake$init, update: _user$project$Snake$update, subscriptions: _user$project$Snake$subscriptions, view: _user$project$Snake$view})();
 
 var Elm = {};
 Elm['Snake'] = Elm['Snake'] || {};

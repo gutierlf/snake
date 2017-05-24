@@ -8,39 +8,43 @@ import Time exposing (..)
 main =
     program
         { init = init
-        , view = view
         , update = update
         , subscriptions = subscriptions
+        , view = view
         }
 
 
 -- MODEL
 
 
+type State = Reset | Play | Pause | Over
 type alias Point = (Int, Int)
 type Heading = North | East | South | West
-type alias Model = { position : Point, heading: Heading }
+type alias Model =
+    { state : State
+    , positions : List Point
+    , heading: Heading
+    , length : Int
+    }
 
 
-origin : Point
-origin = (0, 0)
+(boardWidth,boardHeight) = (6,4)
+(halfWidth,halfHeight) = (3,2)
 
-
-initialModel : Model
-initialModel = Model origin East
 
 
 init : (Model, Cmd Msg)
 init =
-    (initialModel, Cmd.none)
-
-
--- VIEW
-
-
-view : Model -> Html Msg
-view model =
-    text (toString model)
+    let
+        length = 2
+        origin = (halfWidth, halfHeight)
+        y = List.repeat length halfHeight
+        dx = List.range 0 (length - 1)
+        x = List.map2 (-) (List.repeat length halfWidth) dx
+        positions = List.map2 (,) x y
+        initialModel = Model Reset positions East length
+    in
+        (initialModel, Cmd.none)
 
 
 -- UPDATE
@@ -60,7 +64,13 @@ update msg model =
 move : Model -> Model
 move model =
     let
-        (x, y) = model.position
+        (x, y) = 
+            case List.head model.positions of
+                Nothing ->
+                    (0, 0)
+
+                Just point ->
+                   point 
         (dx, dy) = 
             case model.heading of
                 North ->
@@ -75,7 +85,7 @@ move model =
                 West ->
                     (-1, 0)
     in
-        {model | position = (x + dx, y + dy)}
+        { model | positions = (x + dx, y + dy) :: model.positions }
 
 
 turn : Heading -> Model -> Model
@@ -119,3 +129,11 @@ opposite_heading heading =
 subscriptions : Model -> Sub Msg
 subscriptions model =
   Time.every second Tick
+
+
+-- VIEW
+
+
+view : Model -> Html Msg
+view model =
+    text (toString model)
