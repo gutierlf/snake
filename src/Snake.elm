@@ -35,7 +35,6 @@ spacebar : Keyboard.KeyCode
 spacebar = 32
 
 
-
 init : (Model, Cmd Msg)
 init =
     let
@@ -55,7 +54,6 @@ init =
 
 type Msg
     = Tick Time
-    | TogglePause
     | KeyMsg Keyboard.KeyCode
 
 
@@ -64,9 +62,6 @@ update msg model =
     case msg of
         Tick newTime ->
             (move model, Cmd.none)
-
-        TogglePause ->
-            (toggleState model, Cmd.none)
 
         KeyMsg code ->
             if code == spacebar then
@@ -179,8 +174,4 @@ subscriptions model =
 
 view : Model -> Html Msg
 view model =
-    div []
-        [ button [ onClick TogglePause ] [ text "Play" ]
-        , br [] []
-        , text (toString model)
-        ]
+    text (toString model)

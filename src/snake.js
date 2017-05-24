@@ -12640,6 +12640,10 @@ var _elm_lang$keyboard$Keyboard$subMap = F2(
 	});
 _elm_lang$core$Native_Platform.effectManagers['Keyboard'] = {pkg: 'elm-lang/keyboard', init: _elm_lang$keyboard$Keyboard$init, onEffects: _elm_lang$keyboard$Keyboard$onEffects, onSelfMsg: _elm_lang$keyboard$Keyboard$onSelfMsg, tag: 'sub', subMap: _elm_lang$keyboard$Keyboard$subMap};
 
+var _user$project$Snake$view = function (model) {
+	return _elm_lang$html$Html$text(
+		_elm_lang$core$Basics$toString(model));
+};
 var _user$project$Snake$move = function (model) {
 	var _p0 = function () {
 		var _p1 = model.heading;
@@ -12712,25 +12716,18 @@ var _user$project$Snake$toggleState = function (model) {
 var _user$project$Snake$update = F2(
 	function (msg, model) {
 		var _p7 = msg;
-		switch (_p7.ctor) {
-			case 'Tick':
-				return {
-					ctor: '_Tuple2',
-					_0: _user$project$Snake$move(model),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			case 'TogglePause':
-				return {
-					ctor: '_Tuple2',
-					_0: _user$project$Snake$toggleState(model),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			default:
-				return _elm_lang$core$Native_Utils.eq(_p7._0, _user$project$Snake$spacebar) ? {
-					ctor: '_Tuple2',
-					_0: _user$project$Snake$toggleState(model),
-					_1: _elm_lang$core$Platform_Cmd$none
-				} : {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+		if (_p7.ctor === 'Tick') {
+			return {
+				ctor: '_Tuple2',
+				_0: _user$project$Snake$move(model),
+				_1: _elm_lang$core$Platform_Cmd$none
+			};
+		} else {
+			return _elm_lang$core$Native_Utils.eq(_p7._0, _user$project$Snake$spacebar) ? {
+				ctor: '_Tuple2',
+				_0: _user$project$Snake$toggleState(model),
+				_1: _elm_lang$core$Platform_Cmd$none
+			} : {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 		}
 	});
 var _user$project$Snake$West = {ctor: 'West'};
@@ -12793,40 +12790,6 @@ var _user$project$Snake$turn = F2(
 var _user$project$Snake$KeyMsg = function (a) {
 	return {ctor: 'KeyMsg', _0: a};
 };
-var _user$project$Snake$TogglePause = {ctor: 'TogglePause'};
-var _user$project$Snake$view = function (model) {
-	return A2(
-		_elm_lang$html$Html$div,
-		{ctor: '[]'},
-		{
-			ctor: '::',
-			_0: A2(
-				_elm_lang$html$Html$button,
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html_Events$onClick(_user$project$Snake$TogglePause),
-					_1: {ctor: '[]'}
-				},
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html$text('Play'),
-					_1: {ctor: '[]'}
-				}),
-			_1: {
-				ctor: '::',
-				_0: A2(
-					_elm_lang$html$Html$br,
-					{ctor: '[]'},
-					{ctor: '[]'}),
-				_1: {
-					ctor: '::',
-					_0: _elm_lang$html$Html$text(
-						_elm_lang$core$Basics$toString(model)),
-					_1: {ctor: '[]'}
-				}
-			}
-		});
-};
 var _user$project$Snake$Tick = function (a) {
 	return {ctor: 'Tick', _0: a};
 };
@@ -12859,7 +12822,7 @@ var _user$project$Snake$main = _elm_lang$html$Html$program(
 var Elm = {};
 Elm['Snake'] = Elm['Snake'] || {};
 if (typeof _user$project$Snake$main !== 'undefined') {
-    _user$project$Snake$main(Elm['Snake'], 'Snake', {"types":{"unions":{"Snake.Msg":{"args":[],"tags":{"Tick":["Time.Time"],"TogglePause":[],"KeyMsg":["Keyboard.KeyCode"]}}},"aliases":{"Keyboard.KeyCode":{"args":[],"type":"Int"},"Time.Time":{"args":[],"type":"Float"}},"message":"Snake.Msg"},"versions":{"elm":"0.18.0"}});
+    _user$project$Snake$main(Elm['Snake'], 'Snake', {"types":{"unions":{"Snake.Msg":{"args":[],"tags":{"Tick":["Time.Time"],"KeyMsg":["Keyboard.KeyCode"]}}},"aliases":{"Keyboard.KeyCode":{"args":[],"type":"Int"},"Time.Time":{"args":[],"type":"Float"}},"message":"Snake.Msg"},"versions":{"elm":"0.18.0"}});
 }
 
 if (typeof define === "function" && define['amd'])
