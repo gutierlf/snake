@@ -52,6 +52,7 @@ init =
 
 type Msg
     = Tick Time
+    | TogglePause
 
 
 update : Msg -> Model -> (Model, Cmd Msg)
@@ -59,6 +60,17 @@ update msg model =
     case msg of
         Tick newTime ->
             (move model, Cmd.none)
+
+        TogglePause ->
+            let
+                state =
+                    case model.state of
+                        Reset -> Play
+                        Play  -> Pause
+                        Pause -> Play
+                        Over  -> Reset
+            in
+                ({ model | state = state }, Cmd.none)
 
 
 move : Model -> Model
@@ -147,4 +159,8 @@ subscriptions model =
 
 view : Model -> Html Msg
 view model =
-    text (toString model)
+    div []
+        [ button [ onClick TogglePause ] [ text "Play" ]
+        , br [] []
+        , text (toString model)
+        ]
