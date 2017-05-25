@@ -21,34 +21,36 @@ main =
 type State = Reset | Play | Pause | Over
 type alias Point = (Int, Int)
 type alias Head = Point
+type alias Tracks = List Point
+type alias Body = List Point
 type Heading = North | East | South | West
 type alias Length = Int
 type alias Model =
     { state : State
-    , tracks : List Point
+    , tracks : Tracks
     , heading: Heading
     , length : Length
     }
 
 
-(boardWidth,boardHeight) = (6,4)
-(halfWidth,halfHeight) = (3,2)
-spacebar : Keyboard.KeyCode
-spacebar = 32
+(boardWidth,boardHeight) = (600,400)
+
+
+initialModel : Model
+initialModel =
+    let
+        length = 20
+        y = List.repeat length (boardHeight // 2)
+        dx = List.range 0 (length - 1)
+        x = List.map2 (-) (List.repeat length (boardWidth // 2)) dx
+        tracks = List.map2 (,) x y
+    in
+        Model Reset tracks East length
 
 
 init : (Model, Cmd Msg)
 init =
-    let
-        length = 2
-        origin = (halfWidth, halfHeight)
-        y = List.repeat length halfHeight
-        dx = List.range 0 (length - 1)
-        x = List.map2 (-) (List.repeat length halfWidth) dx
-        tracks = List.map2 (,) x y
-        initialModel = Model Reset tracks East length
-    in
-        (initialModel, Cmd.none)
+    (initialModel, Cmd.none)
 
 
 -- UPDATE
@@ -71,23 +73,37 @@ update msg model =
 
 applyKeyInput : Keyboard.KeyCode -> Model -> Model
 applyKeyInput code model =
-    if code == spacebar then
-        toggleState model
-    else
-        model
+    let
+        spacebar    = 32
+        left_arrow  = 37
+        up_arrow    = 38
+        right_arrow = 39
+        down_arrow  = 40
+    in
+        if code == spacebar then
+            toggleState model
+        else if model.state == Play then
+            if code == left_arrow then
+                turn West model
+            else if code == up_arrow then
+                turn North model
+            else if code == right_arrow then
+                turn East model
+            else if code == down_arrow then
+                turn South model
+            else
+                model
+        else
+            model
 
 
 toggleState : Model -> Model
 toggleState model =
-    let
-        state =
-            case model.state of
-                Reset -> Play
-                Play  -> Pause
-                Pause -> Play
-                Over  -> Reset
-    in
-        { model | state = state }
+    case model.state of
+        Reset -> { model | state = Play }
+        Play  -> { model | state = Pause }
+        Pause -> { model | state = Play }
+        Over  -> initialModel
 
 
 tick : Model -> Model
@@ -95,8 +111,14 @@ tick model =
     let
         head = advanceHead model
         tracks = head :: model.tracks
+        body = getBodyFrom tracks model.length
+        state =
+            if anyCollisions head body then
+                Over
+            else
+                model.state
     in
-        { model | tracks = tracks } 
+        { model | tracks = tracks, state = state }
 
 
 advanceHead : Model -> Head
@@ -114,6 +136,26 @@ advanceHead model =
                 West  -> (-1,  0)
     in
         (x + dx, y + dy)
+
+
+getBodyFrom : Tracks -> Length -> Body
+getBodyFrom tracks length =
+    List.drop 1 (List.take length tracks)
+
+
+anyCollisions : Head -> Body -> Bool
+anyCollisions head body =
+    (head |> collidedWithWall) || (collidedwith head body)
+
+
+collidedWithWall : Head -> Bool
+collidedWithWall (x, y) =
+    x == 0 || x == boardWidth || y == 0 || y == boardHeight            
+
+
+(collidedwith) : Head -> Body -> Bool
+(collidedwith) head body =
+    List.member head body
 
 
 turn : Heading -> Model -> Model

@@ -12644,6 +12644,17 @@ var _user$project$Snake$view = function (model) {
 	return _elm_lang$html$Html$text(
 		_elm_lang$core$Basics$toString(model));
 };
+var _user$project$Snake$collidedwith = F2(
+	function (head, body) {
+		return A2(_elm_lang$core$List$member, head, body);
+	});
+var _user$project$Snake$getBodyFrom = F2(
+	function (tracks, length) {
+		return A2(
+			_elm_lang$core$List$drop,
+			1,
+			A2(_elm_lang$core$List$take, length, tracks));
+	});
 var _user$project$Snake$advanceHead = function (model) {
 	var _p0 = function () {
 		var _p1 = model.heading;
@@ -12672,74 +12683,42 @@ var _user$project$Snake$advanceHead = function (model) {
 	var y = _p2._1;
 	return {ctor: '_Tuple2', _0: x + dx, _1: y + dy};
 };
-var _user$project$Snake$tick = function (model) {
-	var head = _user$project$Snake$advanceHead(model);
-	var tracks = {ctor: '::', _0: head, _1: model.tracks};
-	return _elm_lang$core$Native_Utils.update(
-		model,
-		{tracks: tracks});
+var _user$project$Snake$_p4 = {ctor: '_Tuple2', _0: 600, _1: 400};
+var _user$project$Snake$boardWidth = _user$project$Snake$_p4._0;
+var _user$project$Snake$boardHeight = _user$project$Snake$_p4._1;
+var _user$project$Snake$collidedWithWall = function (_p5) {
+	var _p6 = _p5;
+	var _p8 = _p6._1;
+	var _p7 = _p6._0;
+	return _elm_lang$core$Native_Utils.eq(_p7, 0) || (_elm_lang$core$Native_Utils.eq(_p7, _user$project$Snake$boardWidth) || (_elm_lang$core$Native_Utils.eq(_p8, 0) || _elm_lang$core$Native_Utils.eq(_p8, _user$project$Snake$boardHeight)));
 };
-var _user$project$Snake$spacebar = 32;
-var _user$project$Snake$_p4 = {ctor: '_Tuple2', _0: 3, _1: 2};
-var _user$project$Snake$halfWidth = _user$project$Snake$_p4._0;
-var _user$project$Snake$halfHeight = _user$project$Snake$_p4._1;
-var _user$project$Snake$_p5 = {ctor: '_Tuple2', _0: 6, _1: 4};
-var _user$project$Snake$boardWidth = _user$project$Snake$_p5._0;
-var _user$project$Snake$boardHeight = _user$project$Snake$_p5._1;
+var _user$project$Snake$anyCollisions = F2(
+	function (head, body) {
+		return _user$project$Snake$collidedWithWall(head) || A2(_user$project$Snake$collidedwith, head, body);
+	});
 var _user$project$Snake$Model = F4(
 	function (a, b, c, d) {
 		return {state: a, tracks: b, heading: c, length: d};
 	});
 var _user$project$Snake$Over = {ctor: 'Over'};
+var _user$project$Snake$tick = function (model) {
+	var head = _user$project$Snake$advanceHead(model);
+	var tracks = {ctor: '::', _0: head, _1: model.tracks};
+	var body = A2(_user$project$Snake$getBodyFrom, tracks, model.length);
+	var state = A2(_user$project$Snake$anyCollisions, head, body) ? _user$project$Snake$Over : model.state;
+	return _elm_lang$core$Native_Utils.update(
+		model,
+		{tracks: tracks, state: state});
+};
 var _user$project$Snake$Pause = {ctor: 'Pause'};
 var _user$project$Snake$Play = {ctor: 'Play'};
 var _user$project$Snake$Reset = {ctor: 'Reset'};
-var _user$project$Snake$toggleState = function (model) {
-	var state = function () {
-		var _p6 = model.state;
-		switch (_p6.ctor) {
-			case 'Reset':
-				return _user$project$Snake$Play;
-			case 'Play':
-				return _user$project$Snake$Pause;
-			case 'Pause':
-				return _user$project$Snake$Play;
-			default:
-				return _user$project$Snake$Reset;
-		}
-	}();
-	return _elm_lang$core$Native_Utils.update(
-		model,
-		{state: state});
-};
-var _user$project$Snake$applyKeyInput = F2(
-	function (code, model) {
-		return _elm_lang$core$Native_Utils.eq(code, _user$project$Snake$spacebar) ? _user$project$Snake$toggleState(model) : model;
-	});
-var _user$project$Snake$update = F2(
-	function (msg, model) {
-		var _p7 = msg;
-		if (_p7.ctor === 'Tick') {
-			return {
-				ctor: '_Tuple2',
-				_0: _user$project$Snake$tick(model),
-				_1: _elm_lang$core$Platform_Cmd$none
-			};
-		} else {
-			return {
-				ctor: '_Tuple2',
-				_0: A2(_user$project$Snake$applyKeyInput, _p7._0, model),
-				_1: _elm_lang$core$Platform_Cmd$none
-			};
-		}
-	});
 var _user$project$Snake$West = {ctor: 'West'};
 var _user$project$Snake$South = {ctor: 'South'};
 var _user$project$Snake$East = {ctor: 'East'};
-var _user$project$Snake$init = function () {
-	var origin = {ctor: '_Tuple2', _0: _user$project$Snake$halfWidth, _1: _user$project$Snake$halfHeight};
-	var length = 2;
-	var y = A2(_elm_lang$core$List$repeat, length, _user$project$Snake$halfHeight);
+var _user$project$Snake$initialModel = function () {
+	var length = 20;
+	var y = A2(_elm_lang$core$List$repeat, length, (_user$project$Snake$boardHeight / 2) | 0);
 	var dx = A2(_elm_lang$core$List$range, 0, length - 1);
 	var x = A3(
 		_elm_lang$core$List$map2,
@@ -12747,7 +12726,7 @@ var _user$project$Snake$init = function () {
 			function (x, y) {
 				return x - y;
 			}),
-		A2(_elm_lang$core$List$repeat, length, _user$project$Snake$halfWidth),
+		A2(_elm_lang$core$List$repeat, length, (_user$project$Snake$boardWidth / 2) | 0),
 		dx);
 	var tracks = A3(
 		_elm_lang$core$List$map2,
@@ -12757,13 +12736,32 @@ var _user$project$Snake$init = function () {
 			}),
 		x,
 		y);
-	var initialModel = A4(_user$project$Snake$Model, _user$project$Snake$Reset, tracks, _user$project$Snake$East, length);
-	return {ctor: '_Tuple2', _0: initialModel, _1: _elm_lang$core$Platform_Cmd$none};
+	return A4(_user$project$Snake$Model, _user$project$Snake$Reset, tracks, _user$project$Snake$East, length);
 }();
+var _user$project$Snake$init = {ctor: '_Tuple2', _0: _user$project$Snake$initialModel, _1: _elm_lang$core$Platform_Cmd$none};
+var _user$project$Snake$toggleState = function (model) {
+	var _p9 = model.state;
+	switch (_p9.ctor) {
+		case 'Reset':
+			return _elm_lang$core$Native_Utils.update(
+				model,
+				{state: _user$project$Snake$Play});
+		case 'Play':
+			return _elm_lang$core$Native_Utils.update(
+				model,
+				{state: _user$project$Snake$Pause});
+		case 'Pause':
+			return _elm_lang$core$Native_Utils.update(
+				model,
+				{state: _user$project$Snake$Play});
+		default:
+			return _user$project$Snake$initialModel;
+	}
+};
 var _user$project$Snake$North = {ctor: 'North'};
 var _user$project$Snake$opposite_heading = function (heading) {
-	var _p8 = heading;
-	switch (_p8.ctor) {
+	var _p10 = heading;
+	switch (_p10.ctor) {
 		case 'North':
 			return _user$project$Snake$South;
 		case 'East':
@@ -12790,6 +12788,32 @@ var _user$project$Snake$turn = F2(
 			model,
 			{heading: heading}) : model;
 	});
+var _user$project$Snake$applyKeyInput = F2(
+	function (code, model) {
+		var down_arrow = 40;
+		var right_arrow = 39;
+		var up_arrow = 38;
+		var left_arrow = 37;
+		var spacebar = 32;
+		return _elm_lang$core$Native_Utils.eq(code, spacebar) ? _user$project$Snake$toggleState(model) : (_elm_lang$core$Native_Utils.eq(model.state, _user$project$Snake$Play) ? (_elm_lang$core$Native_Utils.eq(code, left_arrow) ? A2(_user$project$Snake$turn, _user$project$Snake$West, model) : (_elm_lang$core$Native_Utils.eq(code, up_arrow) ? A2(_user$project$Snake$turn, _user$project$Snake$North, model) : (_elm_lang$core$Native_Utils.eq(code, right_arrow) ? A2(_user$project$Snake$turn, _user$project$Snake$East, model) : (_elm_lang$core$Native_Utils.eq(code, down_arrow) ? A2(_user$project$Snake$turn, _user$project$Snake$South, model) : model)))) : model);
+	});
+var _user$project$Snake$update = F2(
+	function (msg, model) {
+		var _p11 = msg;
+		if (_p11.ctor === 'Tick') {
+			return {
+				ctor: '_Tuple2',
+				_0: _user$project$Snake$tick(model),
+				_1: _elm_lang$core$Platform_Cmd$none
+			};
+		} else {
+			return {
+				ctor: '_Tuple2',
+				_0: A2(_user$project$Snake$applyKeyInput, _p11._0, model),
+				_1: _elm_lang$core$Platform_Cmd$none
+			};
+		}
+	});
 var _user$project$Snake$KeyMsg = function (a) {
 	return {ctor: 'KeyMsg', _0: a};
 };
@@ -12798,8 +12822,8 @@ var _user$project$Snake$Tick = function (a) {
 };
 var _user$project$Snake$subscriptions = function (model) {
 	var keyboard = _elm_lang$keyboard$Keyboard$downs(_user$project$Snake$KeyMsg);
-	var _p9 = model.state;
-	switch (_p9.ctor) {
+	var _p12 = model.state;
+	switch (_p12.ctor) {
 		case 'Reset':
 			return keyboard;
 		case 'Play':
