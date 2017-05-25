@@ -12644,7 +12644,7 @@ var _user$project$Snake$view = function (model) {
 	return _elm_lang$html$Html$text(
 		_elm_lang$core$Basics$toString(model));
 };
-var _user$project$Snake$move = function (model) {
+var _user$project$Snake$advanceHead = function (model) {
 	var _p0 = function () {
 		var _p1 = model.heading;
 		switch (_p1.ctor) {
@@ -12670,15 +12670,14 @@ var _user$project$Snake$move = function (model) {
 	}();
 	var x = _p2._0;
 	var y = _p2._1;
+	return {ctor: '_Tuple2', _0: x + dx, _1: y + dy};
+};
+var _user$project$Snake$tick = function (model) {
+	var head = _user$project$Snake$advanceHead(model);
+	var tracks = {ctor: '::', _0: head, _1: model.tracks};
 	return _elm_lang$core$Native_Utils.update(
 		model,
-		{
-			tracks: {
-				ctor: '::',
-				_0: {ctor: '_Tuple2', _0: x + dx, _1: y + dy},
-				_1: model.tracks
-			}
-		});
+		{tracks: tracks});
 };
 var _user$project$Snake$spacebar = 32;
 var _user$project$Snake$_p4 = {ctor: '_Tuple2', _0: 3, _1: 2};
@@ -12723,7 +12722,7 @@ var _user$project$Snake$update = F2(
 		if (_p7.ctor === 'Tick') {
 			return {
 				ctor: '_Tuple2',
-				_0: _user$project$Snake$move(model),
+				_0: _user$project$Snake$tick(model),
 				_1: _elm_lang$core$Platform_Cmd$none
 			};
 		} else {

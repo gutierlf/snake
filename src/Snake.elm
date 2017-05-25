@@ -20,6 +20,7 @@ main =
 
 type State = Reset | Play | Pause | Over
 type alias Point = (Int, Int)
+type alias Head = Point
 type Heading = North | East | South | West
 type alias Length = Int
 type alias Model =
@@ -61,8 +62,8 @@ type Msg
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
     case msg of
-        Tick newTime ->
-            (move model, Cmd.none)
+        Tick _ ->
+            (tick model, Cmd.none)
 
         KeyMsg code ->
             (applyKeyInput code model, Cmd.none)
@@ -89,31 +90,30 @@ toggleState model =
         { model | state = state }
 
 
-move : Model -> Model
-move model =
+tick : Model -> Model
+tick model =
+    let
+        head = advanceHead model
+        tracks = head :: model.tracks
+    in
+        { model | tracks = tracks } 
+
+
+advanceHead : Model -> Head
+advanceHead model =
     let
         (x, y) = 
             case List.head model.tracks of
-                Nothing ->
-                    (0, 0)
-
-                Just point ->
-                   point 
+                Nothing    -> (0, 0)
+                Just point -> point
         (dx, dy) = 
             case model.heading of
-                North ->
-                    (0, -1)
-
-                East ->
-                    (1, 0)
-
-                South ->
-                    (0, 1)
-
-                West ->
-                    (-1, 0)
+                North -> ( 0, -1)
+                East  -> ( 1,  0)
+                South -> ( 0,  1)
+                West  -> (-1,  0)
     in
-        { model | tracks = (x + dx, y + dy) :: model.tracks }
+        (x + dx, y + dy)
 
 
 turn : Heading -> Model -> Model
@@ -137,17 +137,10 @@ is_opposite_heading heading other =
 opposite_heading : Heading -> Heading
 opposite_heading heading =
     case heading of
-        North ->
-            South
-
-        East ->
-            West
-
-        South ->
-            North
-
-        West ->
-            East
+        North -> South
+        East  -> West
+        South -> North
+        West  -> East
 
 
 -- SUBSCRIPTIONS
