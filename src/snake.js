@@ -12640,10 +12640,6 @@ var _elm_lang$keyboard$Keyboard$subMap = F2(
 	});
 _elm_lang$core$Native_Platform.effectManagers['Keyboard'] = {pkg: 'elm-lang/keyboard', init: _elm_lang$keyboard$Keyboard$init, onEffects: _elm_lang$keyboard$Keyboard$onEffects, onSelfMsg: _elm_lang$keyboard$Keyboard$onSelfMsg, tag: 'sub', subMap: _elm_lang$keyboard$Keyboard$subMap};
 
-var _user$project$Snake$view = function (model) {
-	return _elm_lang$html$Html$text(
-		_elm_lang$core$Basics$toString(model));
-};
 var _user$project$Snake$collidedwith = F2(
 	function (head, body) {
 		return A2(_elm_lang$core$List$member, head, body);
@@ -12655,10 +12651,18 @@ var _user$project$Snake$getBodyFrom = F2(
 			1,
 			A2(_elm_lang$core$List$take, length, tracks));
 	});
+var _user$project$Snake$getHeadFrom = function (tracks) {
+	var _p0 = _elm_lang$core$List$head(tracks);
+	if (_p0.ctor === 'Nothing') {
+		return {ctor: '_Tuple2', _0: 0, _1: 0};
+	} else {
+		return _p0._0;
+	}
+};
 var _user$project$Snake$advanceHead = function (model) {
-	var _p0 = function () {
-		var _p1 = model.heading;
-		switch (_p1.ctor) {
+	var _p1 = function () {
+		var _p2 = model.heading;
+		switch (_p2.ctor) {
 			case 'North':
 				return {ctor: '_Tuple2', _0: 0, _1: -1};
 			case 'East':
@@ -12669,21 +12673,14 @@ var _user$project$Snake$advanceHead = function (model) {
 				return {ctor: '_Tuple2', _0: -1, _1: 0};
 		}
 	}();
-	var dx = _p0._0;
-	var dy = _p0._1;
-	var _p2 = function () {
-		var _p3 = _elm_lang$core$List$head(model.tracks);
-		if (_p3.ctor === 'Nothing') {
-			return {ctor: '_Tuple2', _0: 0, _1: 0};
-		} else {
-			return _p3._0;
-		}
-	}();
-	var x = _p2._0;
-	var y = _p2._1;
+	var dx = _p1._0;
+	var dy = _p1._1;
+	var _p3 = _user$project$Snake$getHeadFrom(model.tracks);
+	var x = _p3._0;
+	var y = _p3._1;
 	return {ctor: '_Tuple2', _0: x + dx, _1: y + dy};
 };
-var _user$project$Snake$_p4 = {ctor: '_Tuple2', _0: 600, _1: 400};
+var _user$project$Snake$_p4 = {ctor: '_Tuple2', _0: 6, _1: 4};
 var _user$project$Snake$boardWidth = _user$project$Snake$_p4._0;
 var _user$project$Snake$boardHeight = _user$project$Snake$_p4._1;
 var _user$project$Snake$collidedWithWall = function (_p5) {
@@ -12717,7 +12714,7 @@ var _user$project$Snake$West = {ctor: 'West'};
 var _user$project$Snake$South = {ctor: 'South'};
 var _user$project$Snake$East = {ctor: 'East'};
 var _user$project$Snake$initialModel = function () {
-	var length = 20;
+	var length = 2;
 	var y = A2(_elm_lang$core$List$repeat, length, (_user$project$Snake$boardHeight / 2) | 0);
 	var dx = A2(_elm_lang$core$List$range, 0, length - 1);
 	var x = A3(
@@ -12842,6 +12839,113 @@ var _user$project$Snake$subscriptions = function (model) {
 		default:
 			return keyboard;
 	}
+};
+var _user$project$Snake$None = {ctor: 'None'};
+var _user$project$Snake$Snake = {ctor: 'Snake'};
+var _user$project$Snake$Wall = {ctor: 'Wall'};
+var _user$project$Snake$board = function (model) {
+	var arrayMap2 = F3(
+		function (f, a, b) {
+			var listB = _elm_lang$core$Array$toList(b);
+			var listA = _elm_lang$core$Array$toList(a);
+			var mapped = A3(_elm_lang$core$List$map2, f, listA, listB);
+			return _elm_lang$core$Array$fromList(mapped);
+		});
+	var boardY = A2(
+		_elm_lang$core$Array$initialize,
+		_user$project$Snake$boardHeight + 1,
+		function (n) {
+			return A2(_elm_lang$core$Array$repeat, _user$project$Snake$boardWidth + 1, n);
+		});
+	var boardX = A2(
+		_elm_lang$core$Array$repeat,
+		_user$project$Snake$boardHeight + 1,
+		_elm_lang$core$Array$fromList(
+			A2(_elm_lang$core$List$range, 0, _user$project$Snake$boardWidth)));
+	var boardXY = A3(
+		arrayMap2,
+		arrayMap2(
+			F2(
+				function (v0, v1) {
+					return {ctor: '_Tuple2', _0: v0, _1: v1};
+				})),
+		boardX,
+		boardY);
+	var snake = {
+		ctor: '::',
+		_0: _user$project$Snake$getHeadFrom(model.tracks),
+		_1: A2(_user$project$Snake$getBodyFrom, model.tracks, model.length)
+	};
+	var verticalWallY = A2(_elm_lang$core$List$range, 0, _user$project$Snake$boardHeight);
+	var verticalWallX = _elm_lang$core$List$repeat(_user$project$Snake$boardHeight);
+	var verticalWall = function (x) {
+		return A3(
+			_elm_lang$core$List$map2,
+			F2(
+				function (v0, v1) {
+					return {ctor: '_Tuple2', _0: v0, _1: v1};
+				}),
+			verticalWallX(x),
+			verticalWallY);
+	};
+	var leftWall = verticalWall(0);
+	var rightWall = verticalWall(_user$project$Snake$boardWidth);
+	var horizontalWallY = _elm_lang$core$List$repeat(_user$project$Snake$boardWidth);
+	var horizontalWallX = A2(_elm_lang$core$List$range, 0, _user$project$Snake$boardWidth);
+	var horizontalWall = function (y) {
+		return A3(
+			_elm_lang$core$List$map2,
+			F2(
+				function (v0, v1) {
+					return {ctor: '_Tuple2', _0: v0, _1: v1};
+				}),
+			horizontalWallX,
+			horizontalWallY(y));
+	};
+	var topWall = horizontalWall(0);
+	var bottomWall = horizontalWall(_user$project$Snake$boardHeight);
+	var walls = _elm_lang$core$List$concat(
+		{
+			ctor: '::',
+			_0: topWall,
+			_1: {
+				ctor: '::',
+				_0: bottomWall,
+				_1: {
+					ctor: '::',
+					_0: leftWall,
+					_1: {
+						ctor: '::',
+						_0: rightWall,
+						_1: {ctor: '[]'}
+					}
+				}
+			}
+		});
+	var setObject = function (point) {
+		return A2(_elm_lang$core$List$member, point, snake) ? _user$project$Snake$Snake : (A2(_elm_lang$core$List$member, point, walls) ? _user$project$Snake$Wall : _user$project$Snake$None);
+	};
+	return A2(
+		_elm_lang$core$Array$map,
+		_elm_lang$core$Array$map(setObject),
+		boardXY);
+};
+var _user$project$Snake$view = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html$text(
+				_elm_lang$core$Basics$toString(
+					_user$project$Snake$board(model))),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$html$Html$text(
+					_elm_lang$core$Basics$toString(model)),
+				_1: {ctor: '[]'}
+			}
+		});
 };
 var _user$project$Snake$main = _elm_lang$html$Html$program(
 	{init: _user$project$Snake$init, update: _user$project$Snake$update, subscriptions: _user$project$Snake$subscriptions, view: _user$project$Snake$view})();

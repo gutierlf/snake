@@ -4,6 +4,7 @@ import Html exposing (..)
 import Html.Events exposing (onClick)
 import Time exposing (..)
 import Keyboard
+import Array
 
 
 main =
@@ -33,13 +34,13 @@ type alias Model =
     }
 
 
-(boardWidth,boardHeight) = (600,400)
+(boardWidth,boardHeight) = (6,4)
 
 
 initialModel : Model
 initialModel =
     let
-        length = 20
+        length = 2
         y = List.repeat length (boardHeight // 2)
         dx = List.range 0 (length - 1)
         x = List.map2 (-) (List.repeat length (boardWidth // 2)) dx
@@ -124,10 +125,7 @@ tick model =
 advanceHead : Model -> Head
 advanceHead model =
     let
-        (x, y) = 
-            case List.head model.tracks of
-                Nothing    -> (0, 0)
-                Just point -> point
+        (x, y) = getHeadFrom model.tracks
         (dx, dy) = 
             case model.heading of
                 North -> ( 0, -1)
@@ -136,6 +134,13 @@ advanceHead model =
                 West  -> (-1,  0)
     in
         (x + dx, y + dy)
+
+
+getHeadFrom : Tracks -> Head
+getHeadFrom tracks =
+    case List.head tracks of
+        Nothing   -> (0, 0)
+        Just head -> head
 
 
 getBodyFrom : Tracks -> Length -> Body
@@ -150,11 +155,11 @@ anyCollisions head body =
 
 collidedWithWall : Head -> Bool
 collidedWithWall (x, y) =
-    x == 0 || x == boardWidth || y == 0 || y == boardHeight            
+    x == 0 || x == boardWidth || y == 0 || y == boardHeight
 
 
-(collidedwith) : Head -> Body -> Bool
-(collidedwith) head body =
+collidedwith : Head -> Body -> Bool
+collidedwith head body =
     List.member head body
 
 
@@ -213,6 +218,66 @@ subscriptions model =
 -- VIEW
 
 
+type Object = Wall | Snake | None
+
+
+board : Model -> Array.Array (Array.Array Object)
+board model = 
+    let
+        horizontalWallX = List.range 0 boardWidth
+        horizontalWallY = List.repeat boardWidth
+        verticalWallX   = List.repeat boardHeight
+        verticalWallY   = List.range 0 boardHeight
+
+        horizontalWall y = List.map2 (,) horizontalWallX   (horizontalWallY y)
+        verticalWall x   = List.map2 (,) (verticalWallX x) verticalWallY
+
+        topWall    = horizontalWall 0
+        bottomWall = horizontalWall boardHeight
+        leftWall   = verticalWall 0
+        rightWall  = verticalWall boardWidth
+
+        walls = List.concat [topWall, bottomWall, leftWall, rightWall]
+
+        snake = (getHeadFrom model.tracks) :: (getBodyFrom model.tracks model.length)
+
+        boardX : Array.Array (Array.Array Int)
+        boardX =
+            boardWidth
+            |> List.range 0
+            |> Array.fromList
+            |> Array.repeat (boardHeight + 1)
+        boardY : Array.Array (Array.Array Int)
+        boardY =
+            Array.initialize (boardHeight + 1) (\n -> Array.repeat (boardWidth + 1) n)
+
+
+        arrayMap2 : (a -> b -> result) -> Array.Array a -> Array.Array b -> Array.Array result
+        arrayMap2 f a b =
+            let
+                listA = Array.toList a
+                listB = Array.toList b
+                mapped = List.map2 f listA listB 
+            in
+                Array.fromList mapped  
+
+        boardXY : Array.Array (Array.Array Point)
+        boardXY = arrayMap2 (arrayMap2 (,)) boardX boardY
+
+        setObject point =
+            if List.member point snake then
+                Snake
+            else if List.member point walls then
+                Wall
+            else
+                None
+    in
+        Array.map (Array.map setObject) boardXY
+
+
 view : Model -> Html Msg
 view model =
-    text (toString model)
+    div []
+    [ text (toString (board model))
+    , text (toString model) 
+    ]
