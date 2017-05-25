@@ -12661,7 +12661,7 @@ var _user$project$Snake$move = function (model) {
 	var dx = _p0._0;
 	var dy = _p0._1;
 	var _p2 = function () {
-		var _p3 = _elm_lang$core$List$head(model.positions);
+		var _p3 = _elm_lang$core$List$head(model.tracks);
 		if (_p3.ctor === 'Nothing') {
 			return {ctor: '_Tuple2', _0: 0, _1: 0};
 		} else {
@@ -12673,10 +12673,10 @@ var _user$project$Snake$move = function (model) {
 	return _elm_lang$core$Native_Utils.update(
 		model,
 		{
-			positions: {
+			tracks: {
 				ctor: '::',
 				_0: {ctor: '_Tuple2', _0: x + dx, _1: y + dy},
-				_1: model.positions
+				_1: model.tracks
 			}
 		});
 };
@@ -12689,7 +12689,7 @@ var _user$project$Snake$boardWidth = _user$project$Snake$_p5._0;
 var _user$project$Snake$boardHeight = _user$project$Snake$_p5._1;
 var _user$project$Snake$Model = F4(
 	function (a, b, c, d) {
-		return {state: a, positions: b, heading: c, length: d};
+		return {state: a, tracks: b, heading: c, length: d};
 	});
 var _user$project$Snake$Over = {ctor: 'Over'};
 var _user$project$Snake$Pause = {ctor: 'Pause'};
@@ -12713,6 +12713,10 @@ var _user$project$Snake$toggleState = function (model) {
 		model,
 		{state: state});
 };
+var _user$project$Snake$applyKeyInput = F2(
+	function (code, model) {
+		return _elm_lang$core$Native_Utils.eq(code, _user$project$Snake$spacebar) ? _user$project$Snake$toggleState(model) : model;
+	});
 var _user$project$Snake$update = F2(
 	function (msg, model) {
 		var _p7 = msg;
@@ -12723,11 +12727,11 @@ var _user$project$Snake$update = F2(
 				_1: _elm_lang$core$Platform_Cmd$none
 			};
 		} else {
-			return _elm_lang$core$Native_Utils.eq(_p7._0, _user$project$Snake$spacebar) ? {
+			return {
 				ctor: '_Tuple2',
-				_0: _user$project$Snake$toggleState(model),
+				_0: A2(_user$project$Snake$applyKeyInput, _p7._0, model),
 				_1: _elm_lang$core$Platform_Cmd$none
-			} : {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+			};
 		}
 	});
 var _user$project$Snake$West = {ctor: 'West'};
@@ -12746,7 +12750,7 @@ var _user$project$Snake$init = function () {
 			}),
 		A2(_elm_lang$core$List$repeat, length, _user$project$Snake$halfWidth),
 		dx);
-	var positions = A3(
+	var tracks = A3(
 		_elm_lang$core$List$map2,
 		F2(
 			function (v0, v1) {
@@ -12754,7 +12758,7 @@ var _user$project$Snake$init = function () {
 			}),
 		x,
 		y);
-	var initialModel = A4(_user$project$Snake$Model, _user$project$Snake$Reset, positions, _user$project$Snake$East, length);
+	var initialModel = A4(_user$project$Snake$Model, _user$project$Snake$Reset, tracks, _user$project$Snake$East, length);
 	return {ctor: '_Tuple2', _0: initialModel, _1: _elm_lang$core$Platform_Cmd$none};
 }();
 var _user$project$Snake$North = {ctor: 'North'};

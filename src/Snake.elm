@@ -21,11 +21,12 @@ main =
 type State = Reset | Play | Pause | Over
 type alias Point = (Int, Int)
 type Heading = North | East | South | West
+type alias Length = Int
 type alias Model =
     { state : State
-    , positions : List Point
+    , tracks : List Point
     , heading: Heading
-    , length : Int
+    , length : Length
     }
 
 
@@ -43,8 +44,8 @@ init =
         y = List.repeat length halfHeight
         dx = List.range 0 (length - 1)
         x = List.map2 (-) (List.repeat length halfWidth) dx
-        positions = List.map2 (,) x y
-        initialModel = Model Reset positions East length
+        tracks = List.map2 (,) x y
+        initialModel = Model Reset tracks East length
     in
         (initialModel, Cmd.none)
 
@@ -64,10 +65,15 @@ update msg model =
             (move model, Cmd.none)
 
         KeyMsg code ->
-            if code == spacebar then
-                (toggleState model, Cmd.none)
-            else
-                (model, Cmd.none)
+            (applyKeyInput code model, Cmd.none)
+
+
+applyKeyInput : Keyboard.KeyCode -> Model -> Model
+applyKeyInput code model =
+    if code == spacebar then
+        toggleState model
+    else
+        model
 
 
 toggleState : Model -> Model
@@ -87,7 +93,7 @@ move : Model -> Model
 move model =
     let
         (x, y) = 
-            case List.head model.positions of
+            case List.head model.tracks of
                 Nothing ->
                     (0, 0)
 
@@ -107,7 +113,7 @@ move model =
                 West ->
                     (-1, 0)
     in
-        { model | positions = (x + dx, y + dy) :: model.positions }
+        { model | tracks = (x + dx, y + dy) :: model.tracks }
 
 
 turn : Heading -> Model -> Model
