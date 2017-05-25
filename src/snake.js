@@ -12852,19 +12852,16 @@ var _user$project$Snake$board = function (model) {
 			return _elm_lang$core$Array$fromList(mapped);
 		});
 	var boardY = A2(
-		_elm_lang$core$Array$initialize,
-		_user$project$Snake$boardHeight + 1,
-		function (n) {
-			return A2(_elm_lang$core$Array$repeat, _user$project$Snake$boardWidth + 1, n);
-		});
+		_elm_lang$core$List$map,
+		_elm_lang$core$List$repeat(_user$project$Snake$boardWidth + 1),
+		A2(_elm_lang$core$List$range, 0, _user$project$Snake$boardHeight));
 	var boardX = A2(
-		_elm_lang$core$Array$repeat,
+		_elm_lang$core$List$repeat,
 		_user$project$Snake$boardHeight + 1,
-		_elm_lang$core$Array$fromList(
-			A2(_elm_lang$core$List$range, 0, _user$project$Snake$boardWidth)));
+		A2(_elm_lang$core$List$range, 0, _user$project$Snake$boardWidth));
 	var boardXY = A3(
-		arrayMap2,
-		arrayMap2(
+		_elm_lang$core$List$map2,
+		_elm_lang$core$List$map2(
 			F2(
 				function (v0, v1) {
 					return {ctor: '_Tuple2', _0: v0, _1: v1};
@@ -12926,8 +12923,8 @@ var _user$project$Snake$board = function (model) {
 		return A2(_elm_lang$core$List$member, point, snake) ? _user$project$Snake$Snake : (A2(_elm_lang$core$List$member, point, walls) ? _user$project$Snake$Wall : _user$project$Snake$None);
 	};
 	return A2(
-		_elm_lang$core$Array$map,
-		_elm_lang$core$Array$map(setObject),
+		_elm_lang$core$List$map,
+		_elm_lang$core$List$map(setObject),
 		boardXY);
 };
 var _user$project$Snake$view = function (model) {

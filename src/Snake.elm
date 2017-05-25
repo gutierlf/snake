@@ -221,7 +221,7 @@ subscriptions model =
 type Object = Wall | Snake | None
 
 
-board : Model -> Array.Array (Array.Array Object)
+board : Model -> List (List Object)
 board model = 
     let
         horizontalWallX = List.range 0 boardWidth
@@ -241,15 +241,16 @@ board model =
 
         snake = (getHeadFrom model.tracks) :: (getBodyFrom model.tracks model.length)
 
-        boardX : Array.Array (Array.Array Int)
+        boardX : List (List Int)
         boardX =
             boardWidth
             |> List.range 0
-            |> Array.fromList
-            |> Array.repeat (boardHeight + 1)
-        boardY : Array.Array (Array.Array Int)
+            |> List.repeat (boardHeight + 1)
+        boardY : List (List Int)
         boardY =
-            Array.initialize (boardHeight + 1) (\n -> Array.repeat (boardWidth + 1) n)
+            boardHeight
+            |> List.range 0
+            |> List.map (List.repeat (boardWidth + 1))
 
 
         arrayMap2 : (a -> b -> result) -> Array.Array a -> Array.Array b -> Array.Array result
@@ -261,8 +262,8 @@ board model =
             in
                 Array.fromList mapped  
 
-        boardXY : Array.Array (Array.Array Point)
-        boardXY = arrayMap2 (arrayMap2 (,)) boardX boardY
+        boardXY : List (List Point)
+        boardXY = List.map2 (List.map2 (,)) boardX boardY
 
         setObject point =
             if List.member point snake then
@@ -272,7 +273,7 @@ board model =
             else
                 None
     in
-        Array.map (Array.map setObject) boardXY
+        List.map (List.map setObject) boardXY
 
 
 view : Model -> Html Msg
