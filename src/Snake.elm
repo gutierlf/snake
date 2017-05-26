@@ -31,6 +31,7 @@ type alias Model =
     , tracks : Tracks
     , heading: Heading
     , length : Length
+    , food : Point
     }
 
 
@@ -40,13 +41,16 @@ type alias Model =
 initialModel : Model
 initialModel =
     let
-        length = 4
-        y = List.repeat length (boardHeight // 2)
+        length = 10
+        halfHeight = boardHeight // 2 
+        halfWidth = boardWidth // 2
+        y = List.repeat length halfHeight
         dx = List.range 0 (length - 1)
-        x = List.map2 (-) (List.repeat length (boardWidth // 2)) dx
+        x = List.map2 (-) (List.repeat length halfWidth) dx
         tracks = List.map2 (,) x y
+        food = (halfWidth + 2, halfHeight)
     in
-        Model Reset tracks East length
+        Model Reset tracks East length food
 
 
 init : (Model, Cmd Msg)
@@ -218,7 +222,7 @@ subscriptions model =
 -- VIEW
 
 
-type Object = Wall | Snake | None
+type Object = Wall | SnakeHead | SnakeBody | Food | None
 
 
 board : Model -> List (List Object)
@@ -239,7 +243,8 @@ board model =
 
         walls = List.concat [topWall, bottomWall, leftWall, rightWall]
 
-        snake = (getHeadFrom model.tracks) :: (getBodyFrom model.tracks model.length)
+        snakeHead = getHeadFrom model.tracks
+        snakeBody = getBodyFrom model.tracks model.length
 
         boardX : List (List Int)
         boardX =
@@ -256,10 +261,14 @@ board model =
         boardXY = List.map2 (List.map2 (,)) boardX boardY
 
         setObject point =
-            if List.member point snake then
-                Snake
+            if point == snakeHead then
+                SnakeHead
+            else if List.member point snakeBody then
+                SnakeBody
             else if List.member point walls then
                 Wall
+            else if point == model.food then
+                Food
             else
                 None
     in
@@ -270,7 +279,9 @@ objectStrings : Object -> Char
 objectStrings object =
     case object of
         Wall -> '+'
-        Snake -> 'o'
+        SnakeHead -> 'x'
+        SnakeBody -> 'o'
+        Food -> '*'
         None -> '.'
 
 

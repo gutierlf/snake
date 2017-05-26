@@ -12890,8 +12890,12 @@ var _user$project$Snake$objectStrings = function (object) {
 	switch (_p0.ctor) {
 		case 'Wall':
 			return _elm_lang$core$Native_Utils.chr('+');
-		case 'Snake':
+		case 'SnakeHead':
+			return _elm_lang$core$Native_Utils.chr('x');
+		case 'SnakeBody':
 			return _elm_lang$core$Native_Utils.chr('o');
+		case 'Food':
+			return _elm_lang$core$Native_Utils.chr('*');
 		default:
 			return _elm_lang$core$Native_Utils.chr('.');
 	}
@@ -12956,9 +12960,9 @@ var _user$project$Snake$anyCollisions = F2(
 	function (head, body) {
 		return _user$project$Snake$collidedWithWall(head) || A2(_user$project$Snake$collidedwith, head, body);
 	});
-var _user$project$Snake$Model = F4(
-	function (a, b, c, d) {
-		return {state: a, tracks: b, heading: c, length: d};
+var _user$project$Snake$Model = F5(
+	function (a, b, c, d, e) {
+		return {state: a, tracks: b, heading: c, length: d, food: e};
 	});
 var _user$project$Snake$Over = {ctor: 'Over'};
 var _user$project$Snake$tick = function (model) {
@@ -12977,8 +12981,11 @@ var _user$project$Snake$West = {ctor: 'West'};
 var _user$project$Snake$South = {ctor: 'South'};
 var _user$project$Snake$East = {ctor: 'East'};
 var _user$project$Snake$initialModel = function () {
-	var length = 4;
-	var y = A2(_elm_lang$core$List$repeat, length, (_user$project$Snake$boardHeight / 2) | 0);
+	var halfWidth = (_user$project$Snake$boardWidth / 2) | 0;
+	var halfHeight = (_user$project$Snake$boardHeight / 2) | 0;
+	var food = {ctor: '_Tuple2', _0: halfWidth + 2, _1: halfHeight};
+	var length = 10;
+	var y = A2(_elm_lang$core$List$repeat, length, halfHeight);
 	var dx = A2(_elm_lang$core$List$range, 0, length - 1);
 	var x = A3(
 		_elm_lang$core$List$map2,
@@ -12986,7 +12993,7 @@ var _user$project$Snake$initialModel = function () {
 			function (x, y) {
 				return x - y;
 			}),
-		A2(_elm_lang$core$List$repeat, length, (_user$project$Snake$boardWidth / 2) | 0),
+		A2(_elm_lang$core$List$repeat, length, halfWidth),
 		dx);
 	var tracks = A3(
 		_elm_lang$core$List$map2,
@@ -12996,7 +13003,7 @@ var _user$project$Snake$initialModel = function () {
 			}),
 		x,
 		y);
-	return A4(_user$project$Snake$Model, _user$project$Snake$Reset, tracks, _user$project$Snake$East, length);
+	return A5(_user$project$Snake$Model, _user$project$Snake$Reset, tracks, _user$project$Snake$East, length, food);
 }();
 var _user$project$Snake$init = {ctor: '_Tuple2', _0: _user$project$Snake$initialModel, _1: _elm_lang$core$Platform_Cmd$none};
 var _user$project$Snake$toggleState = function (model) {
@@ -13104,7 +13111,9 @@ var _user$project$Snake$subscriptions = function (model) {
 	}
 };
 var _user$project$Snake$None = {ctor: 'None'};
-var _user$project$Snake$Snake = {ctor: 'Snake'};
+var _user$project$Snake$Food = {ctor: 'Food'};
+var _user$project$Snake$SnakeBody = {ctor: 'SnakeBody'};
+var _user$project$Snake$SnakeHead = {ctor: 'SnakeHead'};
 var _user$project$Snake$Wall = {ctor: 'Wall'};
 var _user$project$Snake$board = function (model) {
 	var boardY = A2(
@@ -13124,11 +13133,8 @@ var _user$project$Snake$board = function (model) {
 				})),
 		boardX,
 		boardY);
-	var snake = {
-		ctor: '::',
-		_0: _user$project$Snake$getHeadFrom(model.tracks),
-		_1: A2(_user$project$Snake$getBodyFrom, model.tracks, model.length)
-	};
+	var snakeBody = A2(_user$project$Snake$getBodyFrom, model.tracks, model.length);
+	var snakeHead = _user$project$Snake$getHeadFrom(model.tracks);
 	var verticalWallY = A2(_elm_lang$core$List$range, 0, _user$project$Snake$boardHeight);
 	var verticalWallX = _elm_lang$core$List$repeat(_user$project$Snake$boardHeight);
 	var verticalWall = function (x) {
@@ -13176,7 +13182,7 @@ var _user$project$Snake$board = function (model) {
 			}
 		});
 	var setObject = function (point) {
-		return A2(_elm_lang$core$List$member, point, snake) ? _user$project$Snake$Snake : (A2(_elm_lang$core$List$member, point, walls) ? _user$project$Snake$Wall : _user$project$Snake$None);
+		return _elm_lang$core$Native_Utils.eq(point, snakeHead) ? _user$project$Snake$SnakeHead : (A2(_elm_lang$core$List$member, point, snakeBody) ? _user$project$Snake$SnakeBody : (A2(_elm_lang$core$List$member, point, walls) ? _user$project$Snake$Wall : (_elm_lang$core$Native_Utils.eq(point, model.food) ? _user$project$Snake$Food : _user$project$Snake$None)));
 	};
 	return A2(
 		_elm_lang$core$List$map,
