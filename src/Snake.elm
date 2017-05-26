@@ -5,6 +5,7 @@ import Html.Attributes exposing (class)
 import Time exposing (..)
 import Keyboard
 import Array
+import Random
 
 
 main =
@@ -55,7 +56,20 @@ initialModel =
 
 init : (Model, Cmd Msg)
 init =
-    (initialModel, Cmd.none)
+    (initialModel, generateRandomFood)
+
+
+-- COMMANDS
+
+
+generateRandomFood : Cmd Msg
+generateRandomFood = 
+    Random.generate NewFood randomPoint
+
+
+randomPoint : Random.Generator (Int,Int)
+randomPoint =
+    Random.pair (Random.int 1 boardWidth) (Random.int 1 boardHeight)
 
 
 -- UPDATE
@@ -64,6 +78,7 @@ init =
 type Msg
     = Tick Time
     | KeyMsg Keyboard.KeyCode
+    | NewFood Point
 
 
 update : Msg -> Model -> (Model, Cmd Msg)
@@ -74,6 +89,9 @@ update msg model =
 
         KeyMsg code ->
             (applyKeyInput code model, Cmd.none)
+
+        NewFood food ->
+            ( { model | food = food }, Cmd.none)
 
 
 applyKeyInput : Keyboard.KeyCode -> Model -> Model
@@ -123,17 +141,22 @@ tick model =
             else
                 model.state
         (food, length) =
-            if ate head model.food then
-                ((2, 2), model.length + 3)
+            if encountered head model.food then
+                eat model
             else
                 (model.food, model.length)
     in
         { model | tracks = tracks, state = state, food = food, length = length }
 
 
-ate : Head -> Point -> Bool
-ate head food =
+encountered : Head -> Point -> Bool
+encountered head food =
     head == food
+
+
+eat : Model -> (Point, Length)
+eat model =
+    ((2, 2), model.length + 3)
 
 
 advanceHead : Model -> Head
