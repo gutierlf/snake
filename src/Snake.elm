@@ -1,7 +1,7 @@
 module Snake exposing (..)
 
 import Html exposing (..)
-import Html.Events exposing (onClick)
+import Html.Attributes exposing (class)
 import Time exposing (..)
 import Keyboard
 import Array
@@ -34,13 +34,13 @@ type alias Model =
     }
 
 
-(boardWidth,boardHeight) = (6,4)
+(boardWidth,boardHeight) = (30,20)
 
 
 initialModel : Model
 initialModel =
     let
-        length = 2
+        length = 4
         y = List.repeat length (boardHeight // 2)
         dx = List.range 0 (length - 1)
         x = List.map2 (-) (List.repeat length (boardWidth // 2)) dx
@@ -205,7 +205,7 @@ subscriptions model =
             Play ->
                 Sub.batch
                     [ keyboard
-                    , Time.every second Tick
+                    , Time.every (250 * Time.millisecond) Tick
                     ]
 
             Pause ->
@@ -252,16 +252,6 @@ board model =
             |> List.range 0
             |> List.map (List.repeat (boardWidth + 1))
 
-
-        arrayMap2 : (a -> b -> result) -> Array.Array a -> Array.Array b -> Array.Array result
-        arrayMap2 f a b =
-            let
-                listA = Array.toList a
-                listB = Array.toList b
-                mapped = List.map2 f listA listB 
-            in
-                Array.fromList mapped  
-
         boardXY : List (List Point)
         boardXY = List.map2 (List.map2 (,)) boardX boardY
 
@@ -276,9 +266,39 @@ board model =
         List.map (List.map setObject) boardXY
 
 
+objectStrings : Object -> Char
+objectStrings object =
+    case object of
+        Wall -> '+'
+        Snake -> 'o'
+        None -> '.'
+
+
+boardStrings : List (List Object) -> List String
+boardStrings board = 
+    let
+        f : List Object -> String
+        f objects =
+            objects
+            |> List.map objectStrings
+            |> String.fromList
+    in
+        List.map f board
+
+
+viewBoardLine : String -> Html Msg
+viewBoardLine line =
+    p [] [text line]
+
+
+viewBoardStrings : Model -> List (Html Msg)
+viewBoardStrings model =
+    let
+        strings = model |> board |> boardStrings  
+    in
+        List.map viewBoardLine strings
+
+
 view : Model -> Html Msg
 view model =
-    div []
-    [ text (toString (board model))
-    , text (toString model) 
-    ]
+    div [class "board"] (viewBoardStrings model)

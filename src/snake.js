@@ -12356,120 +12356,355 @@ var _elm_lang$html$Html$summary = _elm_lang$html$Html$node('summary');
 var _elm_lang$html$Html$menuitem = _elm_lang$html$Html$node('menuitem');
 var _elm_lang$html$Html$menu = _elm_lang$html$Html$node('menu');
 
-var _elm_lang$html$Html_Events$keyCode = A2(_elm_lang$core$Json_Decode$field, 'keyCode', _elm_lang$core$Json_Decode$int);
-var _elm_lang$html$Html_Events$targetChecked = A2(
-	_elm_lang$core$Json_Decode$at,
-	{
-		ctor: '::',
-		_0: 'target',
-		_1: {
-			ctor: '::',
-			_0: 'checked',
-			_1: {ctor: '[]'}
-		}
-	},
-	_elm_lang$core$Json_Decode$bool);
-var _elm_lang$html$Html_Events$targetValue = A2(
-	_elm_lang$core$Json_Decode$at,
-	{
-		ctor: '::',
-		_0: 'target',
-		_1: {
-			ctor: '::',
-			_0: 'value',
-			_1: {ctor: '[]'}
-		}
-	},
-	_elm_lang$core$Json_Decode$string);
-var _elm_lang$html$Html_Events$defaultOptions = _elm_lang$virtual_dom$VirtualDom$defaultOptions;
-var _elm_lang$html$Html_Events$onWithOptions = _elm_lang$virtual_dom$VirtualDom$onWithOptions;
-var _elm_lang$html$Html_Events$on = _elm_lang$virtual_dom$VirtualDom$on;
-var _elm_lang$html$Html_Events$onFocus = function (msg) {
+var _elm_lang$html$Html_Attributes$map = _elm_lang$virtual_dom$VirtualDom$mapProperty;
+var _elm_lang$html$Html_Attributes$attribute = _elm_lang$virtual_dom$VirtualDom$attribute;
+var _elm_lang$html$Html_Attributes$contextmenu = function (value) {
+	return A2(_elm_lang$html$Html_Attributes$attribute, 'contextmenu', value);
+};
+var _elm_lang$html$Html_Attributes$draggable = function (value) {
+	return A2(_elm_lang$html$Html_Attributes$attribute, 'draggable', value);
+};
+var _elm_lang$html$Html_Attributes$itemprop = function (value) {
+	return A2(_elm_lang$html$Html_Attributes$attribute, 'itemprop', value);
+};
+var _elm_lang$html$Html_Attributes$tabindex = function (n) {
 	return A2(
-		_elm_lang$html$Html_Events$on,
-		'focus',
-		_elm_lang$core$Json_Decode$succeed(msg));
+		_elm_lang$html$Html_Attributes$attribute,
+		'tabIndex',
+		_elm_lang$core$Basics$toString(n));
 };
-var _elm_lang$html$Html_Events$onBlur = function (msg) {
+var _elm_lang$html$Html_Attributes$charset = function (value) {
+	return A2(_elm_lang$html$Html_Attributes$attribute, 'charset', value);
+};
+var _elm_lang$html$Html_Attributes$height = function (value) {
 	return A2(
-		_elm_lang$html$Html_Events$on,
-		'blur',
-		_elm_lang$core$Json_Decode$succeed(msg));
+		_elm_lang$html$Html_Attributes$attribute,
+		'height',
+		_elm_lang$core$Basics$toString(value));
 };
-var _elm_lang$html$Html_Events$onSubmitOptions = _elm_lang$core$Native_Utils.update(
-	_elm_lang$html$Html_Events$defaultOptions,
-	{preventDefault: true});
-var _elm_lang$html$Html_Events$onSubmit = function (msg) {
-	return A3(
-		_elm_lang$html$Html_Events$onWithOptions,
-		'submit',
-		_elm_lang$html$Html_Events$onSubmitOptions,
-		_elm_lang$core$Json_Decode$succeed(msg));
-};
-var _elm_lang$html$Html_Events$onCheck = function (tagger) {
+var _elm_lang$html$Html_Attributes$width = function (value) {
 	return A2(
-		_elm_lang$html$Html_Events$on,
-		'change',
-		A2(_elm_lang$core$Json_Decode$map, tagger, _elm_lang$html$Html_Events$targetChecked));
+		_elm_lang$html$Html_Attributes$attribute,
+		'width',
+		_elm_lang$core$Basics$toString(value));
 };
-var _elm_lang$html$Html_Events$onInput = function (tagger) {
+var _elm_lang$html$Html_Attributes$formaction = function (value) {
+	return A2(_elm_lang$html$Html_Attributes$attribute, 'formAction', value);
+};
+var _elm_lang$html$Html_Attributes$list = function (value) {
+	return A2(_elm_lang$html$Html_Attributes$attribute, 'list', value);
+};
+var _elm_lang$html$Html_Attributes$minlength = function (n) {
 	return A2(
-		_elm_lang$html$Html_Events$on,
-		'input',
-		A2(_elm_lang$core$Json_Decode$map, tagger, _elm_lang$html$Html_Events$targetValue));
+		_elm_lang$html$Html_Attributes$attribute,
+		'minLength',
+		_elm_lang$core$Basics$toString(n));
 };
-var _elm_lang$html$Html_Events$onMouseOut = function (msg) {
+var _elm_lang$html$Html_Attributes$maxlength = function (n) {
 	return A2(
-		_elm_lang$html$Html_Events$on,
-		'mouseout',
-		_elm_lang$core$Json_Decode$succeed(msg));
+		_elm_lang$html$Html_Attributes$attribute,
+		'maxlength',
+		_elm_lang$core$Basics$toString(n));
 };
-var _elm_lang$html$Html_Events$onMouseOver = function (msg) {
+var _elm_lang$html$Html_Attributes$size = function (n) {
 	return A2(
-		_elm_lang$html$Html_Events$on,
-		'mouseover',
-		_elm_lang$core$Json_Decode$succeed(msg));
+		_elm_lang$html$Html_Attributes$attribute,
+		'size',
+		_elm_lang$core$Basics$toString(n));
 };
-var _elm_lang$html$Html_Events$onMouseLeave = function (msg) {
+var _elm_lang$html$Html_Attributes$form = function (value) {
+	return A2(_elm_lang$html$Html_Attributes$attribute, 'form', value);
+};
+var _elm_lang$html$Html_Attributes$cols = function (n) {
 	return A2(
-		_elm_lang$html$Html_Events$on,
-		'mouseleave',
-		_elm_lang$core$Json_Decode$succeed(msg));
+		_elm_lang$html$Html_Attributes$attribute,
+		'cols',
+		_elm_lang$core$Basics$toString(n));
 };
-var _elm_lang$html$Html_Events$onMouseEnter = function (msg) {
+var _elm_lang$html$Html_Attributes$rows = function (n) {
 	return A2(
-		_elm_lang$html$Html_Events$on,
-		'mouseenter',
-		_elm_lang$core$Json_Decode$succeed(msg));
+		_elm_lang$html$Html_Attributes$attribute,
+		'rows',
+		_elm_lang$core$Basics$toString(n));
 };
-var _elm_lang$html$Html_Events$onMouseUp = function (msg) {
+var _elm_lang$html$Html_Attributes$challenge = function (value) {
+	return A2(_elm_lang$html$Html_Attributes$attribute, 'challenge', value);
+};
+var _elm_lang$html$Html_Attributes$media = function (value) {
+	return A2(_elm_lang$html$Html_Attributes$attribute, 'media', value);
+};
+var _elm_lang$html$Html_Attributes$rel = function (value) {
+	return A2(_elm_lang$html$Html_Attributes$attribute, 'rel', value);
+};
+var _elm_lang$html$Html_Attributes$datetime = function (value) {
+	return A2(_elm_lang$html$Html_Attributes$attribute, 'datetime', value);
+};
+var _elm_lang$html$Html_Attributes$pubdate = function (value) {
+	return A2(_elm_lang$html$Html_Attributes$attribute, 'pubdate', value);
+};
+var _elm_lang$html$Html_Attributes$colspan = function (n) {
 	return A2(
-		_elm_lang$html$Html_Events$on,
-		'mouseup',
-		_elm_lang$core$Json_Decode$succeed(msg));
+		_elm_lang$html$Html_Attributes$attribute,
+		'colspan',
+		_elm_lang$core$Basics$toString(n));
 };
-var _elm_lang$html$Html_Events$onMouseDown = function (msg) {
+var _elm_lang$html$Html_Attributes$rowspan = function (n) {
 	return A2(
-		_elm_lang$html$Html_Events$on,
-		'mousedown',
-		_elm_lang$core$Json_Decode$succeed(msg));
+		_elm_lang$html$Html_Attributes$attribute,
+		'rowspan',
+		_elm_lang$core$Basics$toString(n));
 };
-var _elm_lang$html$Html_Events$onDoubleClick = function (msg) {
-	return A2(
-		_elm_lang$html$Html_Events$on,
-		'dblclick',
-		_elm_lang$core$Json_Decode$succeed(msg));
+var _elm_lang$html$Html_Attributes$manifest = function (value) {
+	return A2(_elm_lang$html$Html_Attributes$attribute, 'manifest', value);
 };
-var _elm_lang$html$Html_Events$onClick = function (msg) {
-	return A2(
-		_elm_lang$html$Html_Events$on,
-		'click',
-		_elm_lang$core$Json_Decode$succeed(msg));
-};
-var _elm_lang$html$Html_Events$Options = F2(
-	function (a, b) {
-		return {stopPropagation: a, preventDefault: b};
+var _elm_lang$html$Html_Attributes$property = _elm_lang$virtual_dom$VirtualDom$property;
+var _elm_lang$html$Html_Attributes$stringProperty = F2(
+	function (name, string) {
+		return A2(
+			_elm_lang$html$Html_Attributes$property,
+			name,
+			_elm_lang$core$Json_Encode$string(string));
 	});
+var _elm_lang$html$Html_Attributes$class = function (name) {
+	return A2(_elm_lang$html$Html_Attributes$stringProperty, 'className', name);
+};
+var _elm_lang$html$Html_Attributes$id = function (name) {
+	return A2(_elm_lang$html$Html_Attributes$stringProperty, 'id', name);
+};
+var _elm_lang$html$Html_Attributes$title = function (name) {
+	return A2(_elm_lang$html$Html_Attributes$stringProperty, 'title', name);
+};
+var _elm_lang$html$Html_Attributes$accesskey = function ($char) {
+	return A2(
+		_elm_lang$html$Html_Attributes$stringProperty,
+		'accessKey',
+		_elm_lang$core$String$fromChar($char));
+};
+var _elm_lang$html$Html_Attributes$dir = function (value) {
+	return A2(_elm_lang$html$Html_Attributes$stringProperty, 'dir', value);
+};
+var _elm_lang$html$Html_Attributes$dropzone = function (value) {
+	return A2(_elm_lang$html$Html_Attributes$stringProperty, 'dropzone', value);
+};
+var _elm_lang$html$Html_Attributes$lang = function (value) {
+	return A2(_elm_lang$html$Html_Attributes$stringProperty, 'lang', value);
+};
+var _elm_lang$html$Html_Attributes$content = function (value) {
+	return A2(_elm_lang$html$Html_Attributes$stringProperty, 'content', value);
+};
+var _elm_lang$html$Html_Attributes$httpEquiv = function (value) {
+	return A2(_elm_lang$html$Html_Attributes$stringProperty, 'httpEquiv', value);
+};
+var _elm_lang$html$Html_Attributes$language = function (value) {
+	return A2(_elm_lang$html$Html_Attributes$stringProperty, 'language', value);
+};
+var _elm_lang$html$Html_Attributes$src = function (value) {
+	return A2(_elm_lang$html$Html_Attributes$stringProperty, 'src', value);
+};
+var _elm_lang$html$Html_Attributes$alt = function (value) {
+	return A2(_elm_lang$html$Html_Attributes$stringProperty, 'alt', value);
+};
+var _elm_lang$html$Html_Attributes$preload = function (value) {
+	return A2(_elm_lang$html$Html_Attributes$stringProperty, 'preload', value);
+};
+var _elm_lang$html$Html_Attributes$poster = function (value) {
+	return A2(_elm_lang$html$Html_Attributes$stringProperty, 'poster', value);
+};
+var _elm_lang$html$Html_Attributes$kind = function (value) {
+	return A2(_elm_lang$html$Html_Attributes$stringProperty, 'kind', value);
+};
+var _elm_lang$html$Html_Attributes$srclang = function (value) {
+	return A2(_elm_lang$html$Html_Attributes$stringProperty, 'srclang', value);
+};
+var _elm_lang$html$Html_Attributes$sandbox = function (value) {
+	return A2(_elm_lang$html$Html_Attributes$stringProperty, 'sandbox', value);
+};
+var _elm_lang$html$Html_Attributes$srcdoc = function (value) {
+	return A2(_elm_lang$html$Html_Attributes$stringProperty, 'srcdoc', value);
+};
+var _elm_lang$html$Html_Attributes$type_ = function (value) {
+	return A2(_elm_lang$html$Html_Attributes$stringProperty, 'type', value);
+};
+var _elm_lang$html$Html_Attributes$value = function (value) {
+	return A2(_elm_lang$html$Html_Attributes$stringProperty, 'value', value);
+};
+var _elm_lang$html$Html_Attributes$defaultValue = function (value) {
+	return A2(_elm_lang$html$Html_Attributes$stringProperty, 'defaultValue', value);
+};
+var _elm_lang$html$Html_Attributes$placeholder = function (value) {
+	return A2(_elm_lang$html$Html_Attributes$stringProperty, 'placeholder', value);
+};
+var _elm_lang$html$Html_Attributes$accept = function (value) {
+	return A2(_elm_lang$html$Html_Attributes$stringProperty, 'accept', value);
+};
+var _elm_lang$html$Html_Attributes$acceptCharset = function (value) {
+	return A2(_elm_lang$html$Html_Attributes$stringProperty, 'acceptCharset', value);
+};
+var _elm_lang$html$Html_Attributes$action = function (value) {
+	return A2(_elm_lang$html$Html_Attributes$stringProperty, 'action', value);
+};
+var _elm_lang$html$Html_Attributes$autocomplete = function (bool) {
+	return A2(
+		_elm_lang$html$Html_Attributes$stringProperty,
+		'autocomplete',
+		bool ? 'on' : 'off');
+};
+var _elm_lang$html$Html_Attributes$enctype = function (value) {
+	return A2(_elm_lang$html$Html_Attributes$stringProperty, 'enctype', value);
+};
+var _elm_lang$html$Html_Attributes$method = function (value) {
+	return A2(_elm_lang$html$Html_Attributes$stringProperty, 'method', value);
+};
+var _elm_lang$html$Html_Attributes$name = function (value) {
+	return A2(_elm_lang$html$Html_Attributes$stringProperty, 'name', value);
+};
+var _elm_lang$html$Html_Attributes$pattern = function (value) {
+	return A2(_elm_lang$html$Html_Attributes$stringProperty, 'pattern', value);
+};
+var _elm_lang$html$Html_Attributes$for = function (value) {
+	return A2(_elm_lang$html$Html_Attributes$stringProperty, 'htmlFor', value);
+};
+var _elm_lang$html$Html_Attributes$max = function (value) {
+	return A2(_elm_lang$html$Html_Attributes$stringProperty, 'max', value);
+};
+var _elm_lang$html$Html_Attributes$min = function (value) {
+	return A2(_elm_lang$html$Html_Attributes$stringProperty, 'min', value);
+};
+var _elm_lang$html$Html_Attributes$step = function (n) {
+	return A2(_elm_lang$html$Html_Attributes$stringProperty, 'step', n);
+};
+var _elm_lang$html$Html_Attributes$wrap = function (value) {
+	return A2(_elm_lang$html$Html_Attributes$stringProperty, 'wrap', value);
+};
+var _elm_lang$html$Html_Attributes$usemap = function (value) {
+	return A2(_elm_lang$html$Html_Attributes$stringProperty, 'useMap', value);
+};
+var _elm_lang$html$Html_Attributes$shape = function (value) {
+	return A2(_elm_lang$html$Html_Attributes$stringProperty, 'shape', value);
+};
+var _elm_lang$html$Html_Attributes$coords = function (value) {
+	return A2(_elm_lang$html$Html_Attributes$stringProperty, 'coords', value);
+};
+var _elm_lang$html$Html_Attributes$keytype = function (value) {
+	return A2(_elm_lang$html$Html_Attributes$stringProperty, 'keytype', value);
+};
+var _elm_lang$html$Html_Attributes$align = function (value) {
+	return A2(_elm_lang$html$Html_Attributes$stringProperty, 'align', value);
+};
+var _elm_lang$html$Html_Attributes$cite = function (value) {
+	return A2(_elm_lang$html$Html_Attributes$stringProperty, 'cite', value);
+};
+var _elm_lang$html$Html_Attributes$href = function (value) {
+	return A2(_elm_lang$html$Html_Attributes$stringProperty, 'href', value);
+};
+var _elm_lang$html$Html_Attributes$target = function (value) {
+	return A2(_elm_lang$html$Html_Attributes$stringProperty, 'target', value);
+};
+var _elm_lang$html$Html_Attributes$downloadAs = function (value) {
+	return A2(_elm_lang$html$Html_Attributes$stringProperty, 'download', value);
+};
+var _elm_lang$html$Html_Attributes$hreflang = function (value) {
+	return A2(_elm_lang$html$Html_Attributes$stringProperty, 'hreflang', value);
+};
+var _elm_lang$html$Html_Attributes$ping = function (value) {
+	return A2(_elm_lang$html$Html_Attributes$stringProperty, 'ping', value);
+};
+var _elm_lang$html$Html_Attributes$start = function (n) {
+	return A2(
+		_elm_lang$html$Html_Attributes$stringProperty,
+		'start',
+		_elm_lang$core$Basics$toString(n));
+};
+var _elm_lang$html$Html_Attributes$headers = function (value) {
+	return A2(_elm_lang$html$Html_Attributes$stringProperty, 'headers', value);
+};
+var _elm_lang$html$Html_Attributes$scope = function (value) {
+	return A2(_elm_lang$html$Html_Attributes$stringProperty, 'scope', value);
+};
+var _elm_lang$html$Html_Attributes$boolProperty = F2(
+	function (name, bool) {
+		return A2(
+			_elm_lang$html$Html_Attributes$property,
+			name,
+			_elm_lang$core$Json_Encode$bool(bool));
+	});
+var _elm_lang$html$Html_Attributes$hidden = function (bool) {
+	return A2(_elm_lang$html$Html_Attributes$boolProperty, 'hidden', bool);
+};
+var _elm_lang$html$Html_Attributes$contenteditable = function (bool) {
+	return A2(_elm_lang$html$Html_Attributes$boolProperty, 'contentEditable', bool);
+};
+var _elm_lang$html$Html_Attributes$spellcheck = function (bool) {
+	return A2(_elm_lang$html$Html_Attributes$boolProperty, 'spellcheck', bool);
+};
+var _elm_lang$html$Html_Attributes$async = function (bool) {
+	return A2(_elm_lang$html$Html_Attributes$boolProperty, 'async', bool);
+};
+var _elm_lang$html$Html_Attributes$defer = function (bool) {
+	return A2(_elm_lang$html$Html_Attributes$boolProperty, 'defer', bool);
+};
+var _elm_lang$html$Html_Attributes$scoped = function (bool) {
+	return A2(_elm_lang$html$Html_Attributes$boolProperty, 'scoped', bool);
+};
+var _elm_lang$html$Html_Attributes$autoplay = function (bool) {
+	return A2(_elm_lang$html$Html_Attributes$boolProperty, 'autoplay', bool);
+};
+var _elm_lang$html$Html_Attributes$controls = function (bool) {
+	return A2(_elm_lang$html$Html_Attributes$boolProperty, 'controls', bool);
+};
+var _elm_lang$html$Html_Attributes$loop = function (bool) {
+	return A2(_elm_lang$html$Html_Attributes$boolProperty, 'loop', bool);
+};
+var _elm_lang$html$Html_Attributes$default = function (bool) {
+	return A2(_elm_lang$html$Html_Attributes$boolProperty, 'default', bool);
+};
+var _elm_lang$html$Html_Attributes$seamless = function (bool) {
+	return A2(_elm_lang$html$Html_Attributes$boolProperty, 'seamless', bool);
+};
+var _elm_lang$html$Html_Attributes$checked = function (bool) {
+	return A2(_elm_lang$html$Html_Attributes$boolProperty, 'checked', bool);
+};
+var _elm_lang$html$Html_Attributes$selected = function (bool) {
+	return A2(_elm_lang$html$Html_Attributes$boolProperty, 'selected', bool);
+};
+var _elm_lang$html$Html_Attributes$autofocus = function (bool) {
+	return A2(_elm_lang$html$Html_Attributes$boolProperty, 'autofocus', bool);
+};
+var _elm_lang$html$Html_Attributes$disabled = function (bool) {
+	return A2(_elm_lang$html$Html_Attributes$boolProperty, 'disabled', bool);
+};
+var _elm_lang$html$Html_Attributes$multiple = function (bool) {
+	return A2(_elm_lang$html$Html_Attributes$boolProperty, 'multiple', bool);
+};
+var _elm_lang$html$Html_Attributes$novalidate = function (bool) {
+	return A2(_elm_lang$html$Html_Attributes$boolProperty, 'noValidate', bool);
+};
+var _elm_lang$html$Html_Attributes$readonly = function (bool) {
+	return A2(_elm_lang$html$Html_Attributes$boolProperty, 'readOnly', bool);
+};
+var _elm_lang$html$Html_Attributes$required = function (bool) {
+	return A2(_elm_lang$html$Html_Attributes$boolProperty, 'required', bool);
+};
+var _elm_lang$html$Html_Attributes$ismap = function (value) {
+	return A2(_elm_lang$html$Html_Attributes$boolProperty, 'isMap', value);
+};
+var _elm_lang$html$Html_Attributes$download = function (bool) {
+	return A2(_elm_lang$html$Html_Attributes$boolProperty, 'download', bool);
+};
+var _elm_lang$html$Html_Attributes$reversed = function (bool) {
+	return A2(_elm_lang$html$Html_Attributes$boolProperty, 'reversed', bool);
+};
+var _elm_lang$html$Html_Attributes$classList = function (list) {
+	return _elm_lang$html$Html_Attributes$class(
+		A2(
+			_elm_lang$core$String$join,
+			' ',
+			A2(
+				_elm_lang$core$List$map,
+				_elm_lang$core$Tuple$first,
+				A2(_elm_lang$core$List$filter, _elm_lang$core$Tuple$second, list))));
+};
+var _elm_lang$html$Html_Attributes$style = _elm_lang$virtual_dom$VirtualDom$style;
 
 var _elm_lang$keyboard$Keyboard$onSelfMsg = F3(
 	function (router, _p0, state) {
@@ -12640,6 +12875,34 @@ var _elm_lang$keyboard$Keyboard$subMap = F2(
 	});
 _elm_lang$core$Native_Platform.effectManagers['Keyboard'] = {pkg: 'elm-lang/keyboard', init: _elm_lang$keyboard$Keyboard$init, onEffects: _elm_lang$keyboard$Keyboard$onEffects, onSelfMsg: _elm_lang$keyboard$Keyboard$onSelfMsg, tag: 'sub', subMap: _elm_lang$keyboard$Keyboard$subMap};
 
+var _user$project$Snake$viewBoardLine = function (line) {
+	return A2(
+		_elm_lang$html$Html$p,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html$text(line),
+			_1: {ctor: '[]'}
+		});
+};
+var _user$project$Snake$objectStrings = function (object) {
+	var _p0 = object;
+	switch (_p0.ctor) {
+		case 'Wall':
+			return _elm_lang$core$Native_Utils.chr('+');
+		case 'Snake':
+			return _elm_lang$core$Native_Utils.chr('o');
+		default:
+			return _elm_lang$core$Native_Utils.chr('.');
+	}
+};
+var _user$project$Snake$boardStrings = function (board) {
+	var f = function (objects) {
+		return _elm_lang$core$String$fromList(
+			A2(_elm_lang$core$List$map, _user$project$Snake$objectStrings, objects));
+	};
+	return A2(_elm_lang$core$List$map, f, board);
+};
 var _user$project$Snake$collidedwith = F2(
 	function (head, body) {
 		return A2(_elm_lang$core$List$member, head, body);
@@ -12652,17 +12915,17 @@ var _user$project$Snake$getBodyFrom = F2(
 			A2(_elm_lang$core$List$take, length, tracks));
 	});
 var _user$project$Snake$getHeadFrom = function (tracks) {
-	var _p0 = _elm_lang$core$List$head(tracks);
-	if (_p0.ctor === 'Nothing') {
+	var _p1 = _elm_lang$core$List$head(tracks);
+	if (_p1.ctor === 'Nothing') {
 		return {ctor: '_Tuple2', _0: 0, _1: 0};
 	} else {
-		return _p0._0;
+		return _p1._0;
 	}
 };
 var _user$project$Snake$advanceHead = function (model) {
-	var _p1 = function () {
-		var _p2 = model.heading;
-		switch (_p2.ctor) {
+	var _p2 = function () {
+		var _p3 = model.heading;
+		switch (_p3.ctor) {
 			case 'North':
 				return {ctor: '_Tuple2', _0: 0, _1: -1};
 			case 'East':
@@ -12673,21 +12936,21 @@ var _user$project$Snake$advanceHead = function (model) {
 				return {ctor: '_Tuple2', _0: -1, _1: 0};
 		}
 	}();
-	var dx = _p1._0;
-	var dy = _p1._1;
-	var _p3 = _user$project$Snake$getHeadFrom(model.tracks);
-	var x = _p3._0;
-	var y = _p3._1;
+	var dx = _p2._0;
+	var dy = _p2._1;
+	var _p4 = _user$project$Snake$getHeadFrom(model.tracks);
+	var x = _p4._0;
+	var y = _p4._1;
 	return {ctor: '_Tuple2', _0: x + dx, _1: y + dy};
 };
-var _user$project$Snake$_p4 = {ctor: '_Tuple2', _0: 6, _1: 4};
-var _user$project$Snake$boardWidth = _user$project$Snake$_p4._0;
-var _user$project$Snake$boardHeight = _user$project$Snake$_p4._1;
-var _user$project$Snake$collidedWithWall = function (_p5) {
-	var _p6 = _p5;
-	var _p8 = _p6._1;
-	var _p7 = _p6._0;
-	return _elm_lang$core$Native_Utils.eq(_p7, 0) || (_elm_lang$core$Native_Utils.eq(_p7, _user$project$Snake$boardWidth) || (_elm_lang$core$Native_Utils.eq(_p8, 0) || _elm_lang$core$Native_Utils.eq(_p8, _user$project$Snake$boardHeight)));
+var _user$project$Snake$_p5 = {ctor: '_Tuple2', _0: 30, _1: 20};
+var _user$project$Snake$boardWidth = _user$project$Snake$_p5._0;
+var _user$project$Snake$boardHeight = _user$project$Snake$_p5._1;
+var _user$project$Snake$collidedWithWall = function (_p6) {
+	var _p7 = _p6;
+	var _p9 = _p7._1;
+	var _p8 = _p7._0;
+	return _elm_lang$core$Native_Utils.eq(_p8, 0) || (_elm_lang$core$Native_Utils.eq(_p8, _user$project$Snake$boardWidth) || (_elm_lang$core$Native_Utils.eq(_p9, 0) || _elm_lang$core$Native_Utils.eq(_p9, _user$project$Snake$boardHeight)));
 };
 var _user$project$Snake$anyCollisions = F2(
 	function (head, body) {
@@ -12714,7 +12977,7 @@ var _user$project$Snake$West = {ctor: 'West'};
 var _user$project$Snake$South = {ctor: 'South'};
 var _user$project$Snake$East = {ctor: 'East'};
 var _user$project$Snake$initialModel = function () {
-	var length = 2;
+	var length = 4;
 	var y = A2(_elm_lang$core$List$repeat, length, (_user$project$Snake$boardHeight / 2) | 0);
 	var dx = A2(_elm_lang$core$List$range, 0, length - 1);
 	var x = A3(
@@ -12737,8 +13000,8 @@ var _user$project$Snake$initialModel = function () {
 }();
 var _user$project$Snake$init = {ctor: '_Tuple2', _0: _user$project$Snake$initialModel, _1: _elm_lang$core$Platform_Cmd$none};
 var _user$project$Snake$toggleState = function (model) {
-	var _p9 = model.state;
-	switch (_p9.ctor) {
+	var _p10 = model.state;
+	switch (_p10.ctor) {
 		case 'Reset':
 			return _elm_lang$core$Native_Utils.update(
 				model,
@@ -12757,8 +13020,8 @@ var _user$project$Snake$toggleState = function (model) {
 };
 var _user$project$Snake$North = {ctor: 'North'};
 var _user$project$Snake$opposite_heading = function (heading) {
-	var _p10 = heading;
-	switch (_p10.ctor) {
+	var _p11 = heading;
+	switch (_p11.ctor) {
 		case 'North':
 			return _user$project$Snake$South;
 		case 'East':
@@ -12796,8 +13059,8 @@ var _user$project$Snake$applyKeyInput = F2(
 	});
 var _user$project$Snake$update = F2(
 	function (msg, model) {
-		var _p11 = msg;
-		if (_p11.ctor === 'Tick') {
+		var _p12 = msg;
+		if (_p12.ctor === 'Tick') {
 			return {
 				ctor: '_Tuple2',
 				_0: _user$project$Snake$tick(model),
@@ -12806,7 +13069,7 @@ var _user$project$Snake$update = F2(
 		} else {
 			return {
 				ctor: '_Tuple2',
-				_0: A2(_user$project$Snake$applyKeyInput, _p11._0, model),
+				_0: A2(_user$project$Snake$applyKeyInput, _p12._0, model),
 				_1: _elm_lang$core$Platform_Cmd$none
 			};
 		}
@@ -12819,8 +13082,8 @@ var _user$project$Snake$Tick = function (a) {
 };
 var _user$project$Snake$subscriptions = function (model) {
 	var keyboard = _elm_lang$keyboard$Keyboard$downs(_user$project$Snake$KeyMsg);
-	var _p12 = model.state;
-	switch (_p12.ctor) {
+	var _p13 = model.state;
+	switch (_p13.ctor) {
 		case 'Reset':
 			return keyboard;
 		case 'Play':
@@ -12830,7 +13093,7 @@ var _user$project$Snake$subscriptions = function (model) {
 					_0: keyboard,
 					_1: {
 						ctor: '::',
-						_0: A2(_elm_lang$core$Time$every, _elm_lang$core$Time$second, _user$project$Snake$Tick),
+						_0: A2(_elm_lang$core$Time$every, 250 * _elm_lang$core$Time$millisecond, _user$project$Snake$Tick),
 						_1: {ctor: '[]'}
 					}
 				});
@@ -12844,13 +13107,6 @@ var _user$project$Snake$None = {ctor: 'None'};
 var _user$project$Snake$Snake = {ctor: 'Snake'};
 var _user$project$Snake$Wall = {ctor: 'Wall'};
 var _user$project$Snake$board = function (model) {
-	var arrayMap2 = F3(
-		function (f, a, b) {
-			var listB = _elm_lang$core$Array$toList(b);
-			var listA = _elm_lang$core$Array$toList(a);
-			var mapped = A3(_elm_lang$core$List$map2, f, listA, listB);
-			return _elm_lang$core$Array$fromList(mapped);
-		});
 	var boardY = A2(
 		_elm_lang$core$List$map,
 		_elm_lang$core$List$repeat(_user$project$Snake$boardWidth + 1),
@@ -12927,22 +13183,20 @@ var _user$project$Snake$board = function (model) {
 		_elm_lang$core$List$map(setObject),
 		boardXY);
 };
+var _user$project$Snake$viewBoardStrings = function (model) {
+	var strings = _user$project$Snake$boardStrings(
+		_user$project$Snake$board(model));
+	return A2(_elm_lang$core$List$map, _user$project$Snake$viewBoardLine, strings);
+};
 var _user$project$Snake$view = function (model) {
 	return A2(
 		_elm_lang$html$Html$div,
-		{ctor: '[]'},
 		{
 			ctor: '::',
-			_0: _elm_lang$html$Html$text(
-				_elm_lang$core$Basics$toString(
-					_user$project$Snake$board(model))),
-			_1: {
-				ctor: '::',
-				_0: _elm_lang$html$Html$text(
-					_elm_lang$core$Basics$toString(model)),
-				_1: {ctor: '[]'}
-			}
-		});
+			_0: _elm_lang$html$Html_Attributes$class('board'),
+			_1: {ctor: '[]'}
+		},
+		_user$project$Snake$viewBoardStrings(model));
 };
 var _user$project$Snake$main = _elm_lang$html$Html$program(
 	{init: _user$project$Snake$init, update: _user$project$Snake$update, subscriptions: _user$project$Snake$subscriptions, view: _user$project$Snake$view})();
