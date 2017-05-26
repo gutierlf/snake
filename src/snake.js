@@ -12974,10 +12974,16 @@ var _user$project$Snake$tick = function (model) {
 	var tracks = {ctor: '::', _0: head, _1: model.tracks};
 	var body = A2(_user$project$Snake$getBodyFrom, tracks, model.length);
 	var state = A2(_user$project$Snake$anyCollisions, head, body) ? _user$project$Snake$Over : model.state;
-	var food = A2(_user$project$Snake$ate, head, model.food) ? {ctor: '_Tuple2', _0: 2, _1: 2} : model.food;
+	var _p10 = A2(_user$project$Snake$ate, head, model.food) ? {
+		ctor: '_Tuple2',
+		_0: {ctor: '_Tuple2', _0: 2, _1: 2},
+		_1: model.length + 3
+	} : {ctor: '_Tuple2', _0: model.food, _1: model.length};
+	var food = _p10._0;
+	var length = _p10._1;
 	return _elm_lang$core$Native_Utils.update(
 		model,
-		{tracks: tracks, state: state, food: food});
+		{tracks: tracks, state: state, food: food, length: length});
 };
 var _user$project$Snake$Pause = {ctor: 'Pause'};
 var _user$project$Snake$Play = {ctor: 'Play'};
@@ -13012,8 +13018,8 @@ var _user$project$Snake$initialModel = function () {
 }();
 var _user$project$Snake$init = {ctor: '_Tuple2', _0: _user$project$Snake$initialModel, _1: _elm_lang$core$Platform_Cmd$none};
 var _user$project$Snake$toggleState = function (model) {
-	var _p10 = model.state;
-	switch (_p10.ctor) {
+	var _p11 = model.state;
+	switch (_p11.ctor) {
 		case 'Reset':
 			return _elm_lang$core$Native_Utils.update(
 				model,
@@ -13032,8 +13038,8 @@ var _user$project$Snake$toggleState = function (model) {
 };
 var _user$project$Snake$North = {ctor: 'North'};
 var _user$project$Snake$opposite_heading = function (heading) {
-	var _p11 = heading;
-	switch (_p11.ctor) {
+	var _p12 = heading;
+	switch (_p12.ctor) {
 		case 'North':
 			return _user$project$Snake$South;
 		case 'East':
@@ -13071,8 +13077,8 @@ var _user$project$Snake$applyKeyInput = F2(
 	});
 var _user$project$Snake$update = F2(
 	function (msg, model) {
-		var _p12 = msg;
-		if (_p12.ctor === 'Tick') {
+		var _p13 = msg;
+		if (_p13.ctor === 'Tick') {
 			return {
 				ctor: '_Tuple2',
 				_0: _user$project$Snake$tick(model),
@@ -13081,7 +13087,7 @@ var _user$project$Snake$update = F2(
 		} else {
 			return {
 				ctor: '_Tuple2',
-				_0: A2(_user$project$Snake$applyKeyInput, _p12._0, model),
+				_0: A2(_user$project$Snake$applyKeyInput, _p13._0, model),
 				_1: _elm_lang$core$Platform_Cmd$none
 			};
 		}
@@ -13094,8 +13100,8 @@ var _user$project$Snake$Tick = function (a) {
 };
 var _user$project$Snake$subscriptions = function (model) {
 	var keyboard = _elm_lang$keyboard$Keyboard$downs(_user$project$Snake$KeyMsg);
-	var _p13 = model.state;
-	switch (_p13.ctor) {
+	var _p14 = model.state;
+	switch (_p14.ctor) {
 		case 'Reset':
 			return keyboard;
 		case 'Play':

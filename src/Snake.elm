@@ -122,13 +122,13 @@ tick model =
                 Over
             else
                 model.state
-        food =
+        (food, length) =
             if ate head model.food then
-                (2, 2)
+                ((2, 2), model.length + 3)
             else
-                model.food
+                (model.food, model.length)
     in
-        { model | tracks = tracks, state = state, food = food }
+        { model | tracks = tracks, state = state, food = food, length = length }
 
 
 ate : Head -> Point -> Bool
