@@ -12947,6 +12947,10 @@ var _user$project$Snake$advanceHead = function (model) {
 	var y = _p4._1;
 	return {ctor: '_Tuple2', _0: x + dx, _1: y + dy};
 };
+var _user$project$Snake$ate = F2(
+	function (head, food) {
+		return _elm_lang$core$Native_Utils.eq(head, food);
+	});
 var _user$project$Snake$_p5 = {ctor: '_Tuple2', _0: 30, _1: 20};
 var _user$project$Snake$boardWidth = _user$project$Snake$_p5._0;
 var _user$project$Snake$boardHeight = _user$project$Snake$_p5._1;
@@ -12970,9 +12974,10 @@ var _user$project$Snake$tick = function (model) {
 	var tracks = {ctor: '::', _0: head, _1: model.tracks};
 	var body = A2(_user$project$Snake$getBodyFrom, tracks, model.length);
 	var state = A2(_user$project$Snake$anyCollisions, head, body) ? _user$project$Snake$Over : model.state;
+	var food = A2(_user$project$Snake$ate, head, model.food) ? {ctor: '_Tuple2', _0: 2, _1: 2} : model.food;
 	return _elm_lang$core$Native_Utils.update(
 		model,
-		{tracks: tracks, state: state});
+		{tracks: tracks, state: state, food: food});
 };
 var _user$project$Snake$Pause = {ctor: 'Pause'};
 var _user$project$Snake$Play = {ctor: 'Play'};

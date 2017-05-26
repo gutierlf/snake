@@ -122,8 +122,18 @@ tick model =
                 Over
             else
                 model.state
+        food =
+            if ate head model.food then
+                (2, 2)
+            else
+                model.food
     in
-        { model | tracks = tracks, state = state }
+        { model | tracks = tracks, state = state, food = food }
+
+
+ate : Head -> Point -> Bool
+ate head food =
+    head == food
 
 
 advanceHead : Model -> Head
