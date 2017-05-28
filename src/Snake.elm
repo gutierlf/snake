@@ -85,7 +85,7 @@ update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
     case msg of
         Tick _ ->
-            (tick model, Cmd.none)
+            tick model
 
         KeyMsg code ->
             (applyKeyInput code model, Cmd.none)
@@ -129,7 +129,7 @@ toggleState model =
         Over  -> initialModel
 
 
-tick : Model -> Model
+tick : Model -> (Model, Cmd Msg)
 tick model =
     let
         head = advanceHead model
@@ -140,13 +140,13 @@ tick model =
                 Over
             else
                 model.state
-        (food, length) =
+        (length, command) =
             if encountered head model.food then
                 eat model
             else
-                (model.food, model.length)
+                (model.length, Cmd.none)
     in
-        { model | tracks = tracks, state = state, food = food, length = length }
+        ({ model | tracks = tracks, state = state, length = length }, command)
 
 
 encountered : Head -> Point -> Bool
@@ -154,9 +154,9 @@ encountered head food =
     head == food
 
 
-eat : Model -> (Point, Length)
+eat : Model -> (Length, Cmd Msg)
 eat model =
-    ((2, 2), model.length + 3)
+    (model.length + 3, generateRandomFood)
 
 
 advanceHead : Model -> Head
