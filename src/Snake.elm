@@ -88,13 +88,13 @@ update msg model =
             tick model
 
         KeyMsg code ->
-            (applyKeyInput code model, Cmd.none)
+            applyKeyInput code model
 
         NewFood food ->
             ( { model | food = food }, Cmd.none)
 
 
-applyKeyInput : Keyboard.KeyCode -> Model -> Model
+applyKeyInput : Keyboard.KeyCode -> Model -> (Model, Cmd Msg)
 applyKeyInput code model =
     let
         spacebar    = 32
@@ -102,31 +102,33 @@ applyKeyInput code model =
         up_arrow    = 38
         right_arrow = 39
         down_arrow  = 40
+
+        turn_with_no_command heading model = (turn heading model, Cmd.none)
     in
         if code == spacebar then
             toggleState model
         else if model.state == Play then
             if code == left_arrow then
-                turn West model
+                turn_with_no_command West model
             else if code == up_arrow then
-                turn North model
+                turn_with_no_command North model
             else if code == right_arrow then
-                turn East model
+                turn_with_no_command East model
             else if code == down_arrow then
-                turn South model
+                turn_with_no_command South model
             else
-                model
+                (model, Cmd.none)
         else
-            model
+            (model, Cmd.none)
 
 
-toggleState : Model -> Model
+toggleState : Model -> (Model, Cmd Msg)
 toggleState model =
     case model.state of
-        Reset -> { model | state = Play }
-        Play  -> { model | state = Pause }
-        Pause -> { model | state = Play }
-        Over  -> initialModel
+        Reset -> ({ model | state = Play }, generateRandomFood)
+        Play  -> ({ model | state = Pause }, Cmd.none)
+        Pause -> ({ model | state = Play }, Cmd.none)
+        Over  -> (initialModel, Cmd.none)
 
 
 tick : Model -> (Model, Cmd Msg)

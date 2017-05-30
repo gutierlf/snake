@@ -13383,29 +13383,10 @@ var _user$project$Snake$initialModel = function () {
 		y);
 	return A5(_user$project$Snake$Model, _user$project$Snake$Reset, tracks, _user$project$Snake$East, length, food);
 }();
-var _user$project$Snake$toggleState = function (model) {
-	var _p10 = model.state;
-	switch (_p10.ctor) {
-		case 'Reset':
-			return _elm_lang$core$Native_Utils.update(
-				model,
-				{state: _user$project$Snake$Play});
-		case 'Play':
-			return _elm_lang$core$Native_Utils.update(
-				model,
-				{state: _user$project$Snake$Pause});
-		case 'Pause':
-			return _elm_lang$core$Native_Utils.update(
-				model,
-				{state: _user$project$Snake$Play});
-		default:
-			return _user$project$Snake$initialModel;
-	}
-};
 var _user$project$Snake$North = {ctor: 'North'};
 var _user$project$Snake$opposite_heading = function (heading) {
-	var _p11 = heading;
-	switch (_p11.ctor) {
+	var _p10 = heading;
+	switch (_p10.ctor) {
 		case 'North':
 			return _user$project$Snake$South;
 		case 'East':
@@ -13432,20 +13413,59 @@ var _user$project$Snake$turn = F2(
 			model,
 			{heading: heading}) : model;
 	});
-var _user$project$Snake$applyKeyInput = F2(
-	function (code, model) {
-		var down_arrow = 40;
-		var right_arrow = 39;
-		var up_arrow = 38;
-		var left_arrow = 37;
-		var spacebar = 32;
-		return _elm_lang$core$Native_Utils.eq(code, spacebar) ? _user$project$Snake$toggleState(model) : (_elm_lang$core$Native_Utils.eq(model.state, _user$project$Snake$Play) ? (_elm_lang$core$Native_Utils.eq(code, left_arrow) ? A2(_user$project$Snake$turn, _user$project$Snake$West, model) : (_elm_lang$core$Native_Utils.eq(code, up_arrow) ? A2(_user$project$Snake$turn, _user$project$Snake$North, model) : (_elm_lang$core$Native_Utils.eq(code, right_arrow) ? A2(_user$project$Snake$turn, _user$project$Snake$East, model) : (_elm_lang$core$Native_Utils.eq(code, down_arrow) ? A2(_user$project$Snake$turn, _user$project$Snake$South, model) : model)))) : model);
-	});
 var _user$project$Snake$NewFood = function (a) {
 	return {ctor: 'NewFood', _0: a};
 };
 var _user$project$Snake$generateRandomFood = A2(_elm_lang$core$Random$generate, _user$project$Snake$NewFood, _user$project$Snake$randomPoint);
 var _user$project$Snake$init = {ctor: '_Tuple2', _0: _user$project$Snake$initialModel, _1: _user$project$Snake$generateRandomFood};
+var _user$project$Snake$toggleState = function (model) {
+	var _p11 = model.state;
+	switch (_p11.ctor) {
+		case 'Reset':
+			return {
+				ctor: '_Tuple2',
+				_0: _elm_lang$core$Native_Utils.update(
+					model,
+					{state: _user$project$Snake$Play}),
+				_1: _user$project$Snake$generateRandomFood
+			};
+		case 'Play':
+			return {
+				ctor: '_Tuple2',
+				_0: _elm_lang$core$Native_Utils.update(
+					model,
+					{state: _user$project$Snake$Pause}),
+				_1: _elm_lang$core$Platform_Cmd$none
+			};
+		case 'Pause':
+			return {
+				ctor: '_Tuple2',
+				_0: _elm_lang$core$Native_Utils.update(
+					model,
+					{state: _user$project$Snake$Play}),
+				_1: _elm_lang$core$Platform_Cmd$none
+			};
+		default:
+			return {ctor: '_Tuple2', _0: _user$project$Snake$initialModel, _1: _elm_lang$core$Platform_Cmd$none};
+	}
+};
+var _user$project$Snake$applyKeyInput = F2(
+	function (code, model) {
+		var turn_with_no_command = F2(
+			function (heading, model) {
+				return {
+					ctor: '_Tuple2',
+					_0: A2(_user$project$Snake$turn, heading, model),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			});
+		var down_arrow = 40;
+		var right_arrow = 39;
+		var up_arrow = 38;
+		var left_arrow = 37;
+		var spacebar = 32;
+		return _elm_lang$core$Native_Utils.eq(code, spacebar) ? _user$project$Snake$toggleState(model) : (_elm_lang$core$Native_Utils.eq(model.state, _user$project$Snake$Play) ? (_elm_lang$core$Native_Utils.eq(code, left_arrow) ? A2(turn_with_no_command, _user$project$Snake$West, model) : (_elm_lang$core$Native_Utils.eq(code, up_arrow) ? A2(turn_with_no_command, _user$project$Snake$North, model) : (_elm_lang$core$Native_Utils.eq(code, right_arrow) ? A2(turn_with_no_command, _user$project$Snake$East, model) : (_elm_lang$core$Native_Utils.eq(code, down_arrow) ? A2(turn_with_no_command, _user$project$Snake$South, model) : {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none})))) : {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none});
+	});
 var _user$project$Snake$eat = function (model) {
 	return {ctor: '_Tuple2', _0: model.length + 3, _1: _user$project$Snake$generateRandomFood};
 };
@@ -13472,11 +13492,7 @@ var _user$project$Snake$update = F2(
 			case 'Tick':
 				return _user$project$Snake$tick(model);
 			case 'KeyMsg':
-				return {
-					ctor: '_Tuple2',
-					_0: A2(_user$project$Snake$applyKeyInput, _p13._0, model),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
+				return A2(_user$project$Snake$applyKeyInput, _p13._0, model);
 			default:
 				return {
 					ctor: '_Tuple2',
